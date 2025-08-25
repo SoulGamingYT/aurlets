@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aurlets Announcements</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .gradient-text {
+      background: linear-gradient(90deg, #ff00ff, #8000ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .glow {
+      text-shadow: 0 0 20px rgba(255, 0, 255, 0.7), 0 0 40px rgba(128, 0, 255, 0.7);
+    }
+  </style>
+</head>
+<body class="bg-black text-white font-sans">
+
+  <!-- Header -->
+  <header class="bg-black border-b border-gray-800 p-4">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <img src="https://i.postimg.cc/DZF2WXYD/aurlets.webp" alt="Aurlets Logo" class="w-10 h-10">
+        <h1 class="text-3xl font-extrabold gradient-text glow">Aurlets</h1>
+      </div>
+      <div class="flex gap-4">
+        <a href="index.html" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-5 py-2 rounded-full font-semibold shadow-lg hover:scale-105 transition">Home</a>
+        <a href="info.html" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-5 py-2 rounded-full font-semibold shadow-lg hover:scale-105 transition">Info</a>
+        <a href="announcements.html" class="px-4 py-2 rounded-full border border-white/20 hover:border-white/40 transition bg-white/10">Announcements</a>
+        <a href="https://discord.gg/aurlets" target="_blank" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-5 py-2 rounded-full font-semibold shadow-lg hover:scale-105 transition">Join Discord</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Announcements Section -->
+  <section class="max-w-5xl mx-auto py-20 px-6">
+    <h2 class="text-5xl font-extrabold gradient-text glow text-center mb-12">📢 Announcements</h2>
+    
+    <div class="space-y-8">
+      <!-- Announcement Card -->
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-lg hover:scale-[1.01] transition">
+        <h3 class="text-2xl font-semibold gradient-text">🚀 New Gaming Event</h3>
+        <p class="text-gray-400 mt-2">Gaming Events Coming Soon <span class="gradient-text">Make sure to Join Discord For More Info.</span>.</p>
+        <p class="text-sm text-gray-500 mt-2">Posted on: Aug 25, 2025</p>
+      </div>
+
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-lg hover:scale-[1.01] transition">
+        <h3 class="text-2xl font-semibold gradient-text">🎉 Community Milestone</h3>
+        <p class="text-gray-400 mt-2">We just hit **300 members**! Thank you Aura Fam for making Aurlets the most chill server in Pakistan. 💜</p>
+        <p class="text-sm text-gray-500 mt-2">Posted on: Aug 25, 2025</p>
+      </div>
+
+      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 shadow-lg hover:scale-[1.01] transition">
+        <h3 class="text-2xl font-semibold gradient-text">🛠 Server Update</h3>
+        <p class="text-gray-400 mt-2">We’ve revamped the **roles & channels** to keep things clean and fun. Check <span class="gradient-text">#rules</span> for the updates.</p>
+        <p class="text-sm text-gray-500 mt-2">Posted on: Aug 24, 2025</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-black p-6 text-center text-gray-500 border-t border-gray-800">
+    © 2025 Aurlets | Built with 🔥 and Aura
+  </footer>
+
+</body>
+</html>
