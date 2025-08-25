@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aurlets - Community Creations</title>
+  <link rel="icon" type="image/png" href="h">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body { background: #0a0a0f; color: #fff; font-family: 'Poppins', sans-serif; }
+    .gradient-text { background: linear-gradient(to right, #ff00cc, #7928ca); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .glow { text-shadow: 0 0 10px rgba(255,0,221,0.7), 0 0 20px rgba(121,40,202,0.6); }
+  </style>
+</head>
+<body>
+
+  <nav class="bg-black bg-opacity-60 p-5 flex justify-between items-center shadow-lg">
+    <a href="index.html" class="flex items-center space-x-3">
+      <img src="images/logo.png" alt="Aurlets Logo" class="w-10 h-10">
+      <span class="text-xl font-bold gradient-text">Aurlets</span>
+    </a>
+    <div class="space-x-6 text-gray-300 font-medium">
+      <a href="index.html" class="hover:text-white">Home</a>
+      <a href="highlights.html" class="hover:text-white">Highlights</a>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <main class="max-w-5xl mx-auto py-16 px-6">
+    <h1 class="text-5xl font-extrabold gradient-text glow text-center mb-12">🎨 Community Creations</h1>
+    <p class="text-gray-300 text-lg text-center mb-12">A showcase of art, edits, and memes made by our talented Aura Farmers!</p>
+
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Example Creation Card -->
+      <div class="bg-gradient-to-br from-purple-800 to-pink-600 rounded-xl p-4 shadow-lg hover:scale-105 transition">
+        <img src="images/sample-art1.png" alt="Creation 1" class="rounded-lg mb-3">
+        <h3 class="text-xl font-semibold">By @Member1</h3>
+      </div>
+
+      <div class="bg-gradient-to-br from-pink-700 to-purple-700 rounded-xl p-4 shadow-lg hover:scale-105 transition">
+        <img src="images/sample-art2.png" alt="Creation 2" class="rounded-lg mb-3">
+        <h3 class="text-xl font-semibold">By @Member2</h3>
+      </div>
+
+      <!-- Add more members’ creations -->
+    </div>
+  </main>
+
+  <footer class="bg-black bg-opacity-70 py-6 text-center text-gray-400">
+    <p>© 2025 Aurlets. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>
