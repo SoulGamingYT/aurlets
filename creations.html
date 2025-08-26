@@ -12,14 +12,15 @@
     .glow { text-shadow: 0 0 10px rgba(255,0,221,0.7), 0 0 20px rgba(121,40,202,0.6); }
   </style>
 </head>
-<body>
 
-  <nav class="bg-black bg-opacity-60 p-5 flex justify-between items-center shadow-lg">
-    <a href="index.html" class="flex items-center space-x-3">
-      <img src="https://i.postimg.cc/DZF2WXYD/aurlets.webp" alt="Aurlets Logo" class="w-10 h-10">
-      <span class="text-xl font-bold gradient-text">Aurlets</span>
-    </a>
-    <div class="space-x-6 text-gray-300 font-medium">
+  <body class="bg-black text-white font-sans">
+
+  <header class="sticky top-0 z-50 bg-black/80 backdrop-blur border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3 group">
+        <img src="https://i.postimg.cc/DZF2WXYD/aurlets.webp" alt="Aurlets Logo" class="w-10 h-10 rounded" />
+        <span class="text-2xl font-extrabold gradient-text soft-glow tracking-wide">Aurlets</span>
+      </a>
       <nav class="hidden md:flex items-center gap-6 text-sm text-gray-300">
       <a href="info.html" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition">
       <i class="fa-solid fa-bullhorn"></i><span>Information</span></a>
@@ -34,7 +35,36 @@
       <a href="https://discord.gg/aurlets" target="_blank" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-pink-400 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition">
       <i class="fab fa-discord text-1xl"></i><span>Discord</span></a></nav>
     </div>
-  </nav>
+
+<!-- Mobile sidemenu ============= -->
+    <button id="menu-btn" class="md:hidden text-white text-2xl focus:outline-none">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+  </header>
+<!--==========================================================================================-->
+ <div id="side-menu" class="fixed top-0 left-0 w-64 h-full bg-black border-r border-gray-800 transform -translate-x-full transition-transform duration-300 z-50">
+    <div class="p-4 flex justify-between items-center border-b border-gray-700">
+      <h2 class="text-xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">Aurlets</h2>
+      <button id="close-btn" class="text-white text-2xl"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <nav class="flex flex-col p-6 space-y-4 text-gray-300">
+      <a href="info.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition"><i class="fa-solid fa-circle-info"></i> Info</a>
+      <a href="announce.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition"><i class="fa-solid fa-bullhorn"></i> Announcements</a>
+      <a href="https://discord.gg/aurlets" target="_blank" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition"><i class="fa-brands fa-discord"></i> Join Discord</a>
+    </nav>
+  </div>
+
+  <!-- JS Inline -->
+  <script>
+    document.getElementById("menu-btn").addEventListener("click", () => {
+      document.getElementById("side-menu").classList.remove("-translate-x-full");
+    });
+
+    document.getElementById("close-btn").addEventListener("click", () => {
+      document.getElementById("side-menu").classList.add("-translate-x-full");
+    });
+  </script>
+ <!--==========================================================================================-->
 
   <main class="max-w-5xl mx-auto py-16 px-6">
     <h1 class="text-5xl font-extrabold gradient-text glow text-center mb-12">🎨 Community Creations</h1>
