@@ -61,21 +61,36 @@
       </div>
 
    <div>
-  <a href="creations.html" class="glow-button block bg-gradient-to-br from-pink-800 to-purple-600 rounded-2xl shadow-xl p-6 transform transition-all duration-300 hover:scale-105">
-  <h3 class="text-2xl font-bold mb-3">🎨 Community Creations</h3>
+<a href="creations.html" class="relative block rounded-2xl p-6 overflow-hidden glow-gradient-button">
+  <h3 class="text-2xl font-bold mb-3 text-white">🎨 Community Creations</h3>
   <p class="text-gray-200 text-sm">Art, edits, and memes made by our talented Aura Farmers.</p>
 </a>
 
 <style>
-  /* Glow effect */
-  .glow-button {
-    box-shadow: 0 0 10px #ff4c4c, 0 0 20px #b832ff;
-  }
+.glow-gradient-button {
+  background: linear-gradient(to bottom right, #ff4c4c, #b832ff);
+  z-index: 0;
+}
 
-  .glow-button:hover {
-    box-shadow: 0 0 20px #ff4c4c, 0 0 40px #b832ff, 0 0 60px #ff4c4c;
-  }
+.glow-gradient-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(to right, #ff4c4c, #00ffff); /* Gradient glow colors */
+  filter: blur(30px); /* Makes it glow */
+  opacity: 0.7;
+  transition: opacity 0.3s;
+  z-index: -1; /* Behind button content */
+}
+
+.glow-gradient-button:hover::before {
+  opacity: 1;
+}
 </style>
+
 </div>
 <!--=====================================================================================-->
 
