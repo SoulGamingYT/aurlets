@@ -11,10 +11,22 @@
     .gradient-text{background:linear-gradient(90deg,#ff2bd6,#8a2bff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
     .soft-glow{text-shadow:0 0 18px rgba(255,43,214,.55),0 0 36px rgba(138,43,255,.45)}
     .aura-bg:before{content:"";position:absolute;inset:-25%;background:radial-gradient(circle at 50% 35%,rgba(255,43,214,.25),transparent 55%),radial-gradient(circle at 70% 65%,rgba(138,43,255,.25),transparent 50%);filter:blur(60px);z-index:0}
+
+    body { background: #0a0a0f; color: #fff; font-family: 'Poppins', sans-serif; }
+
+    /* particles.js container */
+    #tsparticles {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1; /* ensures particles stay in background */
+    }
   </style>
 </head>
 <body class="bg-black text-white font-sans">
-
+<div id="tsparticles"></div>
   <header class="sticky top-0 z-50 bg-black/80 backdrop-blur border-b border-white/10">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
       <a href="/" class="flex items-center gap-3 group">
@@ -123,6 +135,7 @@
   </footer>
 </body>
 </html>
+
 
 
 
