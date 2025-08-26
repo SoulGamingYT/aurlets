@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aurlets – Games</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+
+  <!-- Navbar -->
+  <nav class="flex justify-between items-center px-6 py-4 bg-gray-800 shadow-lg">
+    <h1 class="text-2xl font-bold gradient-text">🎮 Aurlets Games</h1>
+    <a href="index.html" class="px-4 py-2 rounded-md bg-gradient-to-r from-pink-500 to-purple-600 shadow-md hover:scale-105 transition">⬅ Back Home</a>
+  </nav>
+
+  <!-- Header -->
+  <header class="text-center py-12">
+    <h2 class="text-4xl font-extrabold">Play Together Online</h2>
+    <p class="mt-3 text-gray-300">Fun multiplayer games you can play right here with friends!</p>
+  </header>
+
+  <!-- Games Grid -->
+  <main class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto px-6 pb-20">
+
+    <!-- Chess -->
+    <div class="bg-gray-800 rounded-2xl shadow-xl overflow-hidden hover:scale-105 transition">
+      <h3 class="text-xl font-bold bg-gray-700 py-3 text-center">♟️ Play Chess</h3>
+      <iframe src="https://lichess.org/embed/game" class="w-full h-96 border-0"></iframe>
+    </div>
+
+    <!-- Tic Tac Toe -->
+    <div class="bg-gray-800 rounded-2xl shadow-xl p-6 hover:scale-105 transition flex flex-col items-center">
+      <h3 class="text-xl font-bold mb-4">❌⭕ Tic-Tac-Toe</h3>
+      <iframe src="https://playtictactoe.org/" class="w-full h-96 border-0 rounded-lg"></iframe>
+    </div>
+
+    <!-- Skribbl -->
+    <div class="bg-gray-800 rounded-2xl shadow-xl p-6 hover:scale-105 transition text-center">
+      <h3 class="text-xl font-bold mb-4">🎨 Skribbl.io</h3>
+      <p class="text-gray-400 mb-4">Drawing & guessing game. Click below to start a lobby with friends.</p>
+      <a href="https://skribbl.io/" target="_blank"
+         class="px-5 py-3 rounded-full bg-gradient-to-r from-yellow-400 to-pink-500 font-semibold shadow-lg hover:scale-110 transition">
+         🎨 Play Skribbl
+      </a>
+    </div>
+
+    <!-- 2048 -->
+    <div class="bg-gray-800 rounded-2xl shadow-xl p-6 hover:scale-105 transition flex flex-col items-center">
+      <h3 class="text-xl font-bold mb-4">🔢 2048 Puzzle</h3>
+      <iframe src="https://play2048.co/" class="w-full h-96 border-0 rounded-lg"></iframe>
+    </div>
+
+  </main>
+
+</body>
+</html>
