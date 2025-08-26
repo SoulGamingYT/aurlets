@@ -15,7 +15,16 @@
     .glow {
       text-shadow: 0 0 20px rgba(255, 0, 255, 0.7), 0 0 40px rgba(128, 0, 255, 0.7);
     }
+        /* particles.js container */
+    #tsparticles {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1; /* ensures particles stay in background */
   </style>
+
 </head>
 <body class="bg-black text-white font-sans">
 
@@ -79,7 +88,9 @@
   </video>
 
   <div class="absolute top-0 left-0 w-full h-full bg-black/50"></div>
-
+  <!-- Particle background container -->
+  <div id="tsparticles"></div>
+       
   <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
     <img src="https://i.postimg.cc/DZF2WXYD/aurlets.webp" alt="Aurlets Flame" class="w-20 h-20 mx-auto mb-6 animate-bounce" />
     <h1 class="text-5xl md:text-6xl font-extrabold gradient-text soft-glow">Aurlets – The Aura Farmers</h1>
@@ -198,8 +209,35 @@
   <footer class="bg-black p-6 text-center text-gray-500 border-t border-gray-800">
     © 2025 Aurlets | Built with 🔥 and Aura
   </footer>
+  <!-- tsparticles CDN -->
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+<script>
+  tsParticles.load("tsparticles", {
+    background: { color: "#0a0a0f" },
+    particles: {
+      number: { value: 80, density: { enable: true, value_area: 800 } },
+      color: { value: ["#6a0dad", "#4b0082", "#1e90ff", "#00bfff"] }, // purple + blue shades
+      shape: { type: "circle" },
+      opacity: { value: 0.7 },
+      size: { value: { min: 2, max: 5 } }, // random sizes
+      move: { enable: true, speed: 1.5, direction: "none", out_mode: "out" }
+    },
+    interactivity: {
+      events: {
+        onhover: { enable: true, mode: "repulse" },
+        onclick: { enable: true, mode: "push" }
+      },
+      modes: {
+        repulse: { distance: 100 },
+        push: { particles_nb: 4 }
+      }
+    },
+    retina_detect: true
+  });
+</script>
 </body>
 </html>
+
 
 
 
