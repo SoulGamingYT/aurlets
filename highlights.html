@@ -105,32 +105,32 @@
     <p>© 2025 Aurlets. All Rights Reserved.</p>
   </footer>
 
-  <!-- tsparticles CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
-  <script>
-    tsParticles.load("tsparticles", {
-      background: { color: "#0a0a0f" },
-      particles: {
-        number: { value: 80, density: { enable: true, value_area: 800 } },
-        color: { value: ["#ff00cc", "#7928ca", "#ffffff"] },
-        shape: { type: "circle" },
-        opacity: { value: 0.6 },
-        size: { value: 3 },
-        move: { enable: true, speed: 1, direction: "none", out_mode: "out" },
-        links: { enable: true, color: "#ffffff", distance: 150, opacity: 0.4, width: 1 }
+<!-- tsparticles CDN -->
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+<script>
+  tsParticles.load("tsparticles", {
+    background: { color: "#0a0a0f" },
+    particles: {
+      number: { value: 80, density: { enable: true, value_area: 800 } },
+      color: { value: ["#6a0dad", "#4b0082", "#1e90ff", "#00bfff"] }, // purple + blue shades
+      shape: { type: "circle" },
+      opacity: { value: 0.7 },
+      size: { value: { min: 2, max: 5 } }, // random sizes
+      move: { enable: true, speed: 1.5, direction: "none", out_mode: "out" }
+    },
+    interactivity: {
+      events: {
+        onhover: { enable: true, mode: "repulse" },
+        onclick: { enable: true, mode: "push" }
       },
-      interactivity: {
-        events: {
-          onhover: { enable: true, mode: "repulse" },
-          onclick: { enable: true, mode: "push" }
-        },
-        modes: {
-          repulse: { distance: 100 },
-          push: { particles_nb: 4 }
-        }
-      },
-      retina_detect: true
-    });
-  </script>
+      modes: {
+        repulse: { distance: 100 },
+        push: { particles_nb: 4 }
+      }
+    },
+    retina_detect: true
+  });
+</script>
+
 </body>
 </html>
