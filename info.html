@@ -35,7 +35,35 @@
       <a href="https://discord.gg/aurlets" target="_blank" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-pink-400 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition">
       <i class="fab fa-discord text-1xl"></i><span>Discord</span></a></nav>
 
+<!-- Mobile sidemenu ============= -->
+    <button id="menu-btn" class="md:hidden text-white text-2xl focus:outline-none">
+      <i class="fa-solid fa-bars"></i>
+    </button>
   </header>
+<!--==========================================================================================-->
+ <div id="side-menu" class="fixed top-0 left-0 w-64 h-full bg-black border-r border-gray-800 transform -translate-x-full transition-transform duration-300 z-50">
+    <div class="p-4 flex justify-between items-center border-b border-gray-700">
+      <h2 class="text-xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">Aurlets</h2>
+      <button id="close-btn" class="text-white text-2xl"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <nav class="flex flex-col p-6 space-y-4 text-gray-300">
+      <a href="info.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition"><i class="fa-solid fa-circle-info"></i> Info</a>
+      <a href="announce.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition"><i class="fa-solid fa-bullhorn"></i> Announcements</a>
+      <a href="https://discord.gg/aurlets" target="_blank" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition"><i class="fa-brands fa-discord"></i> Join Discord</a>
+    </nav>
+  </div>
+
+  <!-- JS Inline -->
+  <script>
+    document.getElementById("menu-btn").addEventListener("click", () => {
+      document.getElementById("side-menu").classList.remove("-translate-x-full");
+    });
+
+    document.getElementById("close-btn").addEventListener("click", () => {
+      document.getElementById("side-menu").classList.add("-translate-x-full");
+    });
+  </script>
+ <!--==========================================================================================-->
   
   <main id="about" class="relative z-10">
     <section class="max-w-5xl mx-auto px-6 py-16">
@@ -95,6 +123,7 @@
   </footer>
 </body>
 </html>
+
 
 
 
