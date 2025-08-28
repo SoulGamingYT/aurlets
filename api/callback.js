@@ -33,14 +33,15 @@ export default async function handler(req, res) {
 
     const user = await userResponse.json();
 
-    // Save user info in cookie
+    // Save user info in cookie (not HttpOnly so frontend can read)
     res.setHeader(
       "Set-Cookie",
-      `user=${encodeURIComponent(JSON.stringify(user))}; Path=/; HttpOnly; SameSite=Lax`
+      `user=${encodeURIComponent(JSON.stringify(user))}; Path=/; SameSite=Lax`
     );
 
-    // Redirect back to homepage
-    res.redirect("/");
+    // Redirect to homepage
+    res.writeHead(302, { Location: "/" });
+    res.end();
   } catch (err) {
     console.error(err);
     res.status(500).send("Internal Server Error");
