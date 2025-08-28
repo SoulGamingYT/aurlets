@@ -4,96 +4,74 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AFK | Aurlets</title>
-  <style>
-    body {
-      background: #0f0f1a;
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 40px;
-    }
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 20px;
-      color: #ff66cc;
-    }
-    #points {
-      font-size: 2rem;
-      margin-top: 20px;
-      font-weight: bold;
-      text-shadow: 0 0 10px #ff66cc;
-    }
-    .profile {
-      margin: 20px auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .profile img {
-      border-radius: 50%;
-      width: 80px;
-      height: 80px;
-      margin-bottom: 10px;
-    }
-    .ads {
-      margin: 30px auto;
-      background: #222;
-      padding: 10px;
-      border-radius: 8px;
-      width: 80%;
-      height: 90px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #666;
-    }
-  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <h1>🌙 AFK Mode</h1>
-  <div class="profile">
-    <img id="avatar" src="" alt="avatar">
-    <p id="username"></p>
+<body class="bg-gray-900 text-white flex flex-col items-center justify-center h-screen text-center px-4">
+
+  <div id="afk-content" class="hidden">
+    <h1 class="text-4xl font-bold mb-4">AFK Page ⏳</h1>
+    <p class="text-gray-300">Stay AFK and earn **Ayra Points** every 60 seconds.</p>
+
+    <div class="mt-6 bg-gray-800 px-6 py-4 rounded-xl shadow-lg">
+      <p class="text-lg font-semibold">You are logged in as:</p>
+      <div class="flex items-center gap-3 justify-center mt-3">
+        <img id="user-avatar" class="w-12 h-12 rounded-full border border-gray-600">
+        <span id="user-name" class="text-xl font-bold"></span>
+      </div>
+    </div>
+
+    <!-- Example Ad Box -->
+    <div class="mt-8">
+      <div class="bg-gray-700 p-6 rounded-xl shadow-lg text-gray-400">
+        <p>💡 Place ads here (Google AdSense / Propeller Ads / etc).</p>
+      </div>
+    </div>
+
+    <!-- AFK Points Counter -->
+    <div class="mt-10">
+      <h2 class="text-2xl font-bold">AFK Points: <span id="points">0</span></h2>
+      <p class="text-gray-400 text-sm mt-2">(+1 every 60 seconds)</p>
+    </div>
   </div>
 
-  <p>Stay AFK and earn Aura Points every 60 seconds.</p>
-  <div id="points">Aura Points: 0</div>
-
-  <div class="ads">Ad Slot 728x90</div>
-  <div class="ads">Ad Slot 300x250</div>
+  <!-- Redirect Message -->
+  <div id="redirect-message" class="hidden">
+    <h1 class="text-3xl font-bold mb-4">⚠️ Login Required</h1>
+    <p class="text-gray-300">Redirecting to home in <span id="countdown">5</span> seconds...</p>
+  </div>
 
   <script>
-    // Get user data from localStorage (set after login)
     const user = JSON.parse(localStorage.getItem("discordUser"));
     if (!user) {
-      document.body.innerHTML = "<h1>Please login first.</h1>";
-    } else {
-      document.getElementById("avatar").src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
-      document.getElementById("username").innerText = user.username + "#" + user.discriminator;
-    }
+      // Show redirect message
+      document.getElementById("redirect-message").classList.remove("hidden");
 
-    let points = 0;
-
-    function addPoints() {
-      fetch("/api/add-points", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ discordId: user.id })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.points !== undefined) {
-          points = data.points;
-          document.getElementById("points").innerText = "Aura Points: " + points;
+      let countdown = 5;
+      const countdownEl = document.getElementById("countdown");
+      const interval = setInterval(() => {
+        countdown--;
+        countdownEl.textContent = countdown;
+        if (countdown <= 0) {
+          clearInterval(interval);
+          window.location.href = "/";
         }
-      });
+      }, 1000);
+    } else {
+      // Show AFK content
+      document.getElementById("afk-content").classList.remove("hidden");
+
+      // Fill user info
+      document.getElementById("user-avatar").src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+      document.getElementById("user-name").textContent = `${user.username}#${user.discriminator}`;
+
+      // AFK Points System
+      let points = 0;
+      const pointsEl = document.getElementById("points");
+      setInterval(() => {
+        points++;
+        pointsEl.textContent = points;
+      }, 60000); // 60 seconds
     }
-
-    // Add first immediately
-    addPoints();
-
-    // Then every 60 sec
-    setInterval(addPoints, 60000);
   </script>
 </body>
 </html>
