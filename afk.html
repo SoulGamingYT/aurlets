@@ -23,45 +23,77 @@
       font-weight: bold;
       text-shadow: 0 0 10px #ff66cc;
     }
+    .profile {
+      margin: 20px auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .profile img {
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      margin-bottom: 10px;
+    }
     .ads {
       margin: 30px auto;
       background: #222;
       padding: 10px;
       border-radius: 8px;
       width: 80%;
-      height: 90px; /* banner size */
+      height: 90px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: #666;
     }
-    .glow {
-      animation: glow 1.5s infinite alternate;
-    }
-    @keyframes glow {
-      from { text-shadow: 0 0 5px #ff66cc, 0 0 10px #ff66cc; }
-      to { text-shadow: 0 0 20px #ff99ff, 0 0 30px #ff33cc; }
-    }
   </style>
 </head>
 <body>
-  <h1 class="glow">🌙 AFK Mode</h1>
-  <p>Stay AFK and earn Aura Points every 60 seconds.</p>
+  <h1>🌙 AFK Mode</h1>
+  <div class="profile">
+    <img id="avatar" src="" alt="avatar">
+    <p id="username"></p>
+  </div>
 
+  <p>Stay AFK and earn Aura Points every 60 seconds.</p>
   <div id="points">Aura Points: 0</div>
 
-  <!-- Ad Slot (replace with Adsterra/Propeller code) -->
   <div class="ads">Ad Slot 728x90</div>
-
-  <!-- Another Ad Slot -->
   <div class="ads">Ad Slot 300x250</div>
 
   <script>
+    // Get user data from localStorage (set after login)
+    const user = JSON.parse(localStorage.getItem("discordUser"));
+    if (!user) {
+      document.body.innerHTML = "<h1>Please login first.</h1>";
+    } else {
+      document.getElementById("avatar").src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+      document.getElementById("username").innerText = user.username + "#" + user.discriminator;
+    }
+
     let points = 0;
-    setInterval(() => {
-      points += 1; // +1 point every 60s
-      document.getElementById("points").innerText = "Aura Points: " + points;
-    }, 60000); // 60,000 ms = 60 sec
+
+    function addPoints() {
+      fetch("/api/add-points", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ discordId: user.id })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.points !== undefined) {
+          points = data.points;
+          document.getElementById("points").innerText = "Aura Points: " + points;
+        }
+      });
+    }
+
+    // Add first immediately
+    addPoints();
+
+    // Then every 60 sec
+    setInterval(addPoints, 60000);
   </script>
 </body>
 </html>
