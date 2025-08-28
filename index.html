@@ -36,6 +36,33 @@
             <i class="fab fa-discord text-lg"></i> Login
           </a>
         </div>
+        <!--============================LOGIN LINK TO PROFILE============================-->
+<script>
+  // Check if user is passed in URL after login
+  const params = new URLSearchParams(window.location.search);
+  if (params.has("user")) {
+    const user = JSON.parse(decodeURIComponent(params.get("user")));
+    localStorage.setItem("discordUser", JSON.stringify(user));
+    // remove from URL
+    window.history.replaceState({}, document.title, "/");
+  }
+
+  // Load user from localStorage
+  const user = JSON.parse(localStorage.getItem("discordUser"));
+
+  if (user) {
+    // Replace login button with profile
+    document.getElementById("login-btn").style.display = "none";
+
+    const profileDiv = document.createElement("div");
+    profileDiv.innerHTML = `
+      <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" 
+           style="border-radius:50%; width:40px; height:40px; vertical-align:middle; margin-right:8px;">
+      <span>${user.username}#${user.discriminator}</span>
+    `;
+    document.getElementById("user-info").appendChild(profileDiv);
+  }
+</script>
       </nav>
     </div>
     <button id="menu-btn" class="md:hidden text-white text-2xl focus:outline-none">
@@ -270,4 +297,5 @@
 </script>
 </body>
 </html>
+
 
