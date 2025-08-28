@@ -8,13 +8,27 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    .gradient-text { background: linear-gradient(90deg, #ff00ff, #8000ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .glow { text-shadow: 0 0 20px rgba(255, 0, 255, 0.7), 0 0 40px rgba(128, 0, 255, 0.7); }
-    #tsparticles { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; }
+    .gradient-text {
+      background: linear-gradient(90deg, #ff00ff, #8000ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .glow {
+      text-shadow: 0 0 20px rgba(255, 0, 255, 0.7), 0 0 40px rgba(128, 0, 255, 0.7);
+    }
+    #tsparticles {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
   </style>
 </head>
 <body class="bg-black text-white font-sans">
 
+  <!-- HEADER -->
   <header class="sticky top-0 z-50 bg-black/80 backdrop-blur border-b border-white/10">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
       <a href="/" class="flex items-center gap-3 group">
@@ -25,44 +39,11 @@
         <a href="info.html" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition"><i class="fa-solid fa-bullhorn"></i><span>Information</span></a>
         <a href="announce.html" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition"><i class="fa-solid fa-circle-info"></i><span>Announcements</span></a>
         <a href="highlights.html" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition"><i class="fa-solid fa-circle-info"></i><span>Highlights</span></a>
-        <a href="https://www.instagram.com/aurletss" target="_blank" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-red-500 text-white font-semibold shadow-lg hover:scale-105 transition"><i class="fab fa-instagram text-1xl"></i><span>Instagram</span></a>
-        <a href="https://www.tiktok.com/@aurletsofficial" target="_blank" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold shadow-lg hover:scale-105 transition"><i class="fab fa-tiktok text-1xl"></i><span>TikTok</span></a>
-        <a href="https://discord.gg/aurlets" target="_blank" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-pink-400 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition"><i class="fab fa-discord text-1xl"></i><span>Discord</span></a>
-          <!-- 🚀 LOGIN -->
-<div id="auth-section">
-  <button id="login-btn" 
-    class="flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition">
-    <i class="fab fa-discord text-lg"></i> Login
-  </button>
-  <div id="user-info" class="hidden"></div>
-</div>
-        <!--============================LOGIN LINK TO PROFILE============================-->
-<script>
-  // Check if user is passed in URL after login
-  const params = new URLSearchParams(window.location.search);
-  if (params.has("user")) {
-    const user = JSON.parse(decodeURIComponent(params.get("user")));
-    localStorage.setItem("discordUser", JSON.stringify(user));
-    // remove from URL
-    window.history.replaceState({}, document.title, "/");
-  }
-
-  // Load user from localStorage
-  const user = JSON.parse(localStorage.getItem("discordUser"));
-
-  if (user) {
-    // Replace login button with profile
-    document.getElementById("login-btn").style.display = "none";
-
-    const profileDiv = document.createElement("div");
-    profileDiv.innerHTML = `
-      <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" 
-           style="border-radius:50%; width:40px; height:40px; vertical-align:middle; margin-right:8px;">
-      <span>${user.username}#${user.discriminator}</span>
-    `;
-    document.getElementById("user-info").appendChild(profileDiv);
-  }
-</script>
+        <a href="https://www.instagram.com/aurletss" target="_blank" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-red-500 text-white font-semibold shadow-lg hover:scale-105 transition"><i class="fab fa-instagram"></i><span>Instagram</span></a>
+        <a href="https://www.tiktok.com/@aurletsofficial" target="_blank" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold shadow-lg hover:scale-105 transition"><i class="fab fa-tiktok"></i><span>TikTok</span></a>
+        <a href="https://discord.gg/aurlets" target="_blank" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-pink-400 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition"><i class="fab fa-discord"></i><span>Discord</span></a>
+        <!-- LOGIN AREA -->
+        <div id="auth-area-desktop"></div>
       </nav>
     </div>
     <button id="menu-btn" class="md:hidden text-white text-2xl focus:outline-none">
@@ -81,12 +62,8 @@
       <a href="announce.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition"><i class="fa-solid fa-bullhorn"></i> Announcements</a>
       <a href="highlights.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition"><i class="fa-solid fa-circle-info"></i> Highlights</a>
       <a href="https://discord.gg/aurlets" target="_blank" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition"><i class="fa-brands fa-discord"></i> Join Discord</a>
-      
-      <!-- Mobile login area -->
-      <div id="auth-area-mobile">
-        <a href="https://discord.com/api/oauth2/authorize?client_id=1410157454137884754&redirect_uri=https%3A%2F%2Faurlets.vercel.app%2Fapi%2Fcallback&response_type=code&scope=identify" 
-           class="px-4 py-2 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 shadow hover:scale-105 transition"><i class="fab fa-discord"></i> Login</a>
-      </div>
+      <!-- Mobile LOGIN AREA -->
+      <div id="auth-area-mobile"></div>
     </nav>
   </div>
 
@@ -97,50 +74,6 @@
     document.getElementById("close-btn").addEventListener("click", () => {
       document.getElementById("side-menu").classList.add("-translate-x-full");
     });
-
-    // 🔑 Auth system
-    function getCookie(name) {
-      const value = `; ${document.cookie}`;
-      const parts = value.split(`; ${name}=`);
-      if (parts.length === 2) return decodeURIComponent(parts.pop().split(";").shift());
-    }
-
-    const userCookie = getCookie("user");
-    if (userCookie) {
-      try {
-        const user = JSON.parse(userCookie);
-
-        // Desktop
-        document.getElementById("auth-area-desktop").innerHTML = `
-          <div class="flex items-center gap-3">
-            <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" class="w-8 h-8 rounded-full border border-gray-600" />
-            <span class="text-sm font-semibold">${user.username}#${user.discriminator}</span>
-            <button id="logout-btn-d" class="px-3 py-1 text-xs bg-red-600 rounded-full hover:bg-red-700">Logout</button>
-          </div>
-        `;
-
-        // Mobile
-        document.getElementById("auth-area-mobile").innerHTML = `
-          <div class="flex items-center gap-3 mt-4">
-            <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" class="w-8 h-8 rounded-full border border-gray-600" />
-            <span class="text-sm font-semibold">${user.username}</span>
-            <button id="logout-btn-m" class="px-3 py-1 text-xs bg-red-600 rounded-full hover:bg-red-700">Logout</button>
-          </div>
-        `;
-
-        // Logout buttons
-        document.getElementById("logout-btn-d")?.addEventListener("click", () => {
-          document.cookie = "user=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT";
-          location.reload();
-        });
-        document.getElementById("logout-btn-m")?.addEventListener("click", () => {
-          document.cookie = "user=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT";
-          location.reload();
-        });
-      } catch (err) {
-        console.error("Invalid user cookie", err);
-      }
-    }
   </script>
 
   <!-- HERO SECTION -->
@@ -152,24 +85,8 @@
       <h1 class="text-5xl md:text-6xl font-extrabold gradient-text soft-glow">Aurlets – The Aura Farmers</h1>
       <p class="mt-4 text-xl italic text-gray-300">“Young, Black and Rich”</p>
       <p class="mt-6 text-gray-400 max-w-3xl mx-auto">A chill Pakistani Discord community for gamers, music lovers, anime enjoyers, and late-night vibers. Grow your aura with us. 🔥</p>
-      <div class="mt-8 flex items-center justify-center gap-4 flex-wrap">
-        <a href="https://discord.gg/aurlets" target="_blank" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-pink-400 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition">
-          <i class="fab fa-discord text-1xl"></i><span>Join Now</span>
-        </a>
-        <a href="info.html" class="px-6 py-3 rounded-full border border-white/15 hover:border-white/30 hover:bg-white/5 transition">Learn More</a>
-        <!--================================================ 🚀 LOGIN ================================================================-->
-<div id="auth-section">
-  <button id="login-btn" 
-    class="flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition">
-    <i class="fab fa-discord text-lg"></i> Login
-  </button>
-  <div id="user-info" class="hidden"></div>
-</div>
-
-      </div>
     </div>
   </section>
-
 
 
 
@@ -271,56 +188,33 @@
   </a>
 </div>
   </section>
-  
+
   <footer class="bg-black p-6 text-center text-gray-500 border-t border-gray-800">
     © 2025 Aurlets | Built with 🔥 and Aura
   </footer>
+
   <!-- tsparticles CDN -->
-<script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
-<script>
-  tsParticles.load("tsparticles", {
-    background: { color: "#0a0a0f" },
-    particles: {
-      number: { value: 80, density: { enable: true, value_area: 800 } },
-      color: { value: ["#6a0dad", "#4b0082", "#1e90ff", "#00bfff"] }, // purple + blue shades
-      shape: { type: "circle" },
-      opacity: { value: 0.7 },
-      size: { value: { min: 2, max: 5 } }, // random sizes
-      move: { enable: true, speed: 1.5, direction: "none", out_mode: "out" }
-    },
-    interactivity: {
-      events: {
-        onhover: { enable: true, mode: "repulse" },
-        onclick: { enable: true, mode: "push" }
-      },
-      modes: {
-        repulse: { distance: 100 },
-        push: { particles_nb: 4 }
-      }
-    },
-    retina_detect: true
-  });
-</script>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
   <script>
-  let afkTimer;
+    tsParticles.load("tsparticles", {
+      background: { color: "#0a0a0f" },
+      particles: {
+        number: { value: 80, density: { enable: true, value_area: 800 } },
+        color: { value: ["#6a0dad", "#4b0082", "#1e90ff", "#00bfff"] },
+        shape: { type: "circle" },
+        opacity: { value: 0.7 },
+        size: { value: { min: 2, max: 5 } },
+        move: { enable: true, speed: 1.5, direction: "none", out_mode: "out" }
+      },
+      interactivity: {
+        events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" } },
+        modes: { repulse: { distance: 100 }, push: { particles_nb: 4 } }
+      },
+      retina_detect: true
+    });
+  </script>
 
-  function resetAfkTimer() {
-    clearTimeout(afkTimer);
-    afkTimer = setTimeout(() => {
-      window.location.href = "afk.html"; // redirect after 3 mins
-    }, 3 * 60 * 1000); // 3 minutes in ms
-  }
-
-  // Reset AFK timer on user activity
-  window.onload = resetAfkTimer;
-  document.onmousemove = resetAfkTimer;
-  document.onkeypress = resetAfkTimer;
-  document.ontouchstart = resetAfkTimer;
-</script>
-<script src="index.js"></script>
+  <!-- main login logic -->
+  <script src="index.js"></script>
 </body>
 </html>
-
-
-
-
