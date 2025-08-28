@@ -1,77 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AFK | Aurlets</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AFK Page - Aurlets</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-900 text-white flex flex-col items-center justify-center h-screen text-center px-4">
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
 
-  <div id="afk-content" class="hidden">
-    <h1 class="text-4xl font-bold mb-4">AFK Page ⏳</h1>
-    <p class="text-gray-300">Stay AFK and earn **Ayra Points** every 60 seconds.</p>
+  <!-- Container -->
+  <div id="afk-container" class="hidden text-center space-y-6">
+    <h1 class="text-3xl font-bold">💤 AFK Farming</h1>
 
-    <div class="mt-6 bg-gray-800 px-6 py-4 rounded-xl shadow-lg">
-      <p class="text-lg font-semibold">You are logged in as:</p>
-      <div class="flex items-center gap-3 justify-center mt-3">
-        <img id="user-avatar" class="w-12 h-12 rounded-full border border-gray-600">
-        <span id="user-name" class="text-xl font-bold"></span>
-      </div>
+    <!-- User info -->
+    <div class="flex flex-col items-center space-y-2">
+      <img id="user-avatar" class="w-16 h-16 rounded-full border-2 border-blue-400" />
+      <p id="user-name" class="text-lg font-semibold"></p>
     </div>
 
-    <!-- Example Ad Box -->
-    <div class="mt-8">
-      <div class="bg-gray-700 p-6 rounded-xl shadow-lg text-gray-400">
-        <p>💡 Place ads here (Google AdSense / Propeller Ads / etc).</p>
-      </div>
+    <!-- Points & Timer -->
+    <div class="space-y-2">
+      <p class="text-xl">Your Ayra Points: <span id="points" class="font-bold text-green-400">0</span></p>
+      <p class="text-sm">⏳ Next point in <span id="countdown" class="font-bold">60</span> seconds</p>
     </div>
 
-    <!-- AFK Points Counter -->
-    <div class="mt-10">
-      <h2 class="text-2xl font-bold">AFK Points: <span id="points">0</span></h2>
-      <p class="text-gray-400 text-sm mt-2">(+1 every 60 seconds)</p>
+    <!-- Ad placeholder -->
+    <div class="mt-6 p-4 bg-gray-800 rounded-lg shadow-lg">
+      <p class="text-gray-400">[Ad Space - Place your AdSense / other ad code here]</p>
     </div>
   </div>
 
-  <!-- Redirect Message -->
-  <div id="redirect-message" class="hidden">
-    <h1 class="text-3xl font-bold mb-4">⚠️ Login Required</h1>
-    <p class="text-gray-300">Redirecting to home in <span id="countdown">5</span> seconds...</p>
-  </div>
-
+  <!-- Script -->
   <script>
-    const user = JSON.parse(localStorage.getItem("discordUser"));
-    if (!user) {
-      // Show redirect message
-      document.getElementById("redirect-message").classList.remove("hidden");
-
-      let countdown = 5;
-      const countdownEl = document.getElementById("countdown");
-      const interval = setInterval(() => {
-        countdown--;
-        countdownEl.textContent = countdown;
-        if (countdown <= 0) {
-          clearInterval(interval);
+    async function checkLogin() {
+      try {
+        const res = await fetch("/api/me");
+        if (!res.ok) {
           window.location.href = "/";
+          return;
         }
-      }, 1000);
-    } else {
-      // Show AFK content
-      document.getElementById("afk-content").classList.remove("hidden");
 
-      // Fill user info
-      document.getElementById("user-avatar").src = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
-      document.getElementById("user-name").textContent = `${user.username}#${user.discriminator}`;
+        const user = await res.json();
+        document.getElementById("afk-container").classList.remove("hidden");
 
-      // AFK Points System
-      let points = 0;
-      const pointsEl = document.getElementById("points");
-      setInterval(() => {
-        points++;
-        pointsEl.textContent = points;
-      }, 60000); // 60 seconds
+        document.getElementById("user-avatar").src =
+          `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+        document.getElementById("user-name").innerText =
+          `${user.username}#${user.discriminator}`;
+
+        // Load initial points
+        const pointsRes = await fetch("/api/points");
+        const data = await pointsRes.json();
+        document.getElementById("points").innerText = data.points || 0;
+
+      } catch (err) {
+        console.error("Login check failed:", err);
+        window.location.href = "/";
+      }
     }
+
+    let countdown = 60;
+
+    function startAFK() {
+      setInterval(async () => {
+        if (countdown <= 1) {
+          try {
+            const res = await fetch("/api/points", { method: "POST" });
+            const data = await res.json();
+            document.getElementById("points").innerText = data.points;
+          } catch (err) {
+            console.error("Error updating points:", err);
+          }
+          countdown = 60;
+        } else {
+          countdown--;
+        }
+        document.getElementById("countdown").innerText = countdown;
+      }, 1000);
+    }
+
+    checkLogin().then(startAFK);
   </script>
 </body>
 </html>
