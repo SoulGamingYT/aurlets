@@ -1,116 +1,82 @@
-// index.js
+// ================== CONFIG ==================
+const CLIENT_ID = "1410157454137884754";
+const REDIRECT_URI = "https://aurlets.vercel.app/api/callback";
+const API_BASE = "https://discord.com/api";
+const OAUTH_URL = `https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(
+  REDIRECT_URI
+)}&response_type=code&scope=identify`;
 
-const CLIENT_ID = "1410157454137884754"; // replace with your bot's OAuth2 client_id
-const REDIRECT_URI = window.location.origin + window.location.pathname; // redirects back here
-const API_ENDPOINT = "https://discord.com/api/users/@me";
+// ================== HELPERS ==================
+function setUser(user) {
+  const loginBtn = document.getElementById("login-btn");
+  const userBox = document.getElementById("user-box");
 
-// DOM targets
-const authAreaDesktop = document.getElementById("auth-area-desktop");
-const authAreaMobile = document.getElementById("auth-area-mobile");
-
-// Build Discord OAuth2 link
-const discordAuthURL =
-  `https://discord.com/api/oauth2/authorize` +
-  `?client_id=${CLIENT_ID}` +
-  `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}` +
-  `&response_type=token&scope=identify`;
-
-// Handle login success (token in URL fragment)
-function handleRedirect() {
-  const hash = window.location.hash;
-  if (hash.includes("access_token")) {
-    const params = new URLSearchParams(hash.substring(1));
-    const accessToken = params.get("access_token");
-    localStorage.setItem("discord_token", accessToken);
-
-    // remove the fragment from URL
-    window.location.hash = "";
+  if (user) {
+    loginBtn.style.display = "none";
+    userBox.innerHTML = `
+      <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png" 
+           alt="avatar" class="w-10 h-10 rounded-full inline-block">
+      <span class="ml-2 font-bold text-white">${user.username}#${user.discriminator}</span>
+    `;
+    userBox.style.display = "flex";
+  } else {
+    loginBtn.style.display = "block";
+    userBox.style.display = "none";
   }
 }
 
-// Fetch user info from Discord API
-async function fetchUser(token) {
-  const response = await fetch(API_ENDPOINT, {
+async function getUserInfo(token) {
+  const res = await fetch(`${API_BASE}/users/@me`, {
     headers: { Authorization: `Bearer ${token}` },
   });
-  if (!response.ok) return null;
-  return response.json();
+  if (!res.ok) return null;
+  return await res.json();
 }
 
-// Render login/logout UI
-async function renderAuth() {
-  const token = localStorage.getItem("discord_token");
+// ================== MAIN FLOW ==================
+document.addEventListener("DOMContentLoaded", async () => {
+  const loginBtn = document.getElementById("login-btn");
+  const userBox = document.getElementById("user-box");
 
-  if (!token) {
-    // Show login button
-    const loginBtn = `<a href="${discordAuthURL}" class="px-4 py-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold shadow-lg hover:scale-105 transition flex items-center gap-2">
-      <i class="fab fa-discord"></i> Login with Discord
-    </a>`;
-    authAreaDesktop.innerHTML = loginBtn;
-    authAreaMobile.innerHTML = loginBtn;
-    return;
+  loginBtn.addEventListener("click", () => {
+    window.location.href = OAUTH_URL;
+  });
+
+  // 1. Check if we already have a token
+  let token = localStorage.getItem("discord_token");
+  if (token) {
+    const user = await getUserInfo(token);
+    if (user) {
+      setUser(user);
+      return;
+    } else {
+      localStorage.removeItem("discord_token"); // invalid token
+    }
   }
 
-  // Fetch user
-  const user = await fetchUser(token);
-  if (!user) {
-    localStorage.removeItem("discord_token");
-    return renderAuth();
+  // 2. If redirected from Discord OAuth2 with ?code=...
+  const urlParams = new URLSearchParams(window.location.search);
+  const code = urlParams.get("code");
+  if (code) {
+    try {
+      // Exchange code for token via backend
+      const res = await fetch(`/api/callback?code=${code}`);
+      const data = await res.json();
+
+      if (data.access_token) {
+        localStorage.setItem("discord_token", data.access_token);
+        const user = await getUserInfo(data.access_token);
+        setUser(user);
+
+        // redirect to homepage clean URL
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 3000);
+      }
+    } catch (err) {
+      console.error("OAuth2 Error:", err);
+    }
+  } else {
+    setUser(null);
   }
-
-  // User info
-  const avatarUrl = user.avatar
-    ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=64`
-    : "https://cdn.discordapp.com/embed/avatars/0.png";
-
-  const userUI = `
-    <div class="flex items-center gap-2">
-      <img src="${avatarUrl}" class="w-8 h-8 rounded-full border border-gray-600" alt="avatar"/>
-      <span class="text-sm font-semibold">${user.username}</span>
-      <button onclick="logout()" class="px-2 py-1 bg-red-600 rounded text-xs hover:bg-red-700">Logout</button>
-    </div>
-  `;
-
-  authAreaDesktop.innerHTML = userUI;
-  authAreaMobile.innerHTML = userUI;
-
-  // Save for AFK page
-  localStorage.setItem("discord_user", JSON.stringify(user));
-}
-
-// Logout
-function logout() {
-  localStorage.removeItem("discord_token");
-  localStorage.removeItem("discord_user");
-  renderAuth();
-}
-
-// --- AFK PAGE HELPER ---
-function checkAFKLogin() {
-  const userData = localStorage.getItem("discord_user");
-  if (!userData) {
-    document.body.innerHTML = `
-      <div class="flex flex-col items-center justify-center min-h-screen text-center text-white bg-black">
-        <h1 class="text-2xl font-bold mb-4">You must log in with Discord first!</h1>
-        <a href="/" class="px-4 py-2 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-semibold shadow-lg hover:scale-105 transition">Go to Home</a>
-      </div>`;
-    return;
-  }
-
-  const user = JSON.parse(userData);
-  document.body.insertAdjacentHTML("afterbegin", `
-    <div class="fixed top-4 right-4 flex items-center gap-2 bg-gray-800 px-3 py-2 rounded-lg shadow">
-      <img src="https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=64" class="w-6 h-6 rounded-full border border-gray-600"/>
-      <span class="text-sm">${user.username}</span>
-    </div>
-  `);
-}
-
-// --- RUN ---
-handleRedirect();
-renderAuth();
-
-// If this is AFK page, call checkAFKLogin()
-if (window.location.pathname.includes("afk.html")) {
-  checkAFKLogin();
-}
+});
