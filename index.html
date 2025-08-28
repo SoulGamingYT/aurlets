@@ -295,7 +295,25 @@
     retina_detect: true
   });
 </script>
+  <script>
+  let afkTimer;
+
+  function resetAfkTimer() {
+    clearTimeout(afkTimer);
+    afkTimer = setTimeout(() => {
+      window.location.href = "afk.html"; // redirect after 3 mins
+    }, 3 * 60 * 1000); // 3 minutes in ms
+  }
+
+  // Reset AFK timer on user activity
+  window.onload = resetAfkTimer;
+  document.onmousemove = resetAfkTimer;
+  document.onkeypress = resetAfkTimer;
+  document.ontouchstart = resetAfkTimer;
+</script>
+
 </body>
 </html>
+
 
 
