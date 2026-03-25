@@ -1,4 +1,4 @@
-const socket = io("https://aurlets.up.railway.app");
+const socket = io("/kotd");
 
 let username="";
 
