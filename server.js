@@ -4,18 +4,53 @@ const { Server } = require("socket.io");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+    cors: { origin: "*", methods: ["GET", "POST"] }
+});
 
 app.use(express.static("public"));
 
 let players = {};
-let currentQuestion = "What is 2 + 2?";
-let roundTime = 30;
+let roundActive = false;
 let timerInterval = null;
+let roundTime = 30;
 
-// Broadcast question and start timer
+let currentQuestion = "";
+let currentAnswer = "";
+
+// Utility: generate a random integer between min and max (inclusive)
+function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Generate random math question
+function generateQuestion() {
+    const operations = ["+", "-", "*", "/"];
+    const op = operations[randInt(0, operations.length - 1)];
+    let a = randInt(1, 20);
+    let b = randInt(1, 20);
+
+    if (op === "/") {
+        // Ensure integer division
+        a = a * b;
+        currentAnswer = (a / b).toString();
+    } else if (op === "+") {
+        currentAnswer = (a + b).toString();
+    } else if (op === "-") {
+        currentAnswer = (a - b).toString();
+    } else if (op === "*") {
+        currentAnswer = (a * b).toString();
+    }
+
+    currentQuestion = `${a} ${op} ${b} = ?`;
+}
+
+// Start a round
 function startRound() {
+    roundActive = true;
+    generateQuestion();
     io.emit("question", currentQuestion);
+
     let countdown = roundTime;
     io.emit("timer", countdown);
 
@@ -23,14 +58,17 @@ function startRound() {
     timerInterval = setInterval(() => {
         countdown--;
         io.emit("timer", countdown);
+
         if (countdown <= 0) {
-            io.emit("log", "Round ended! Next round coming soon...");
             clearInterval(timerInterval);
-            // Optional: generate new question
-            currentQuestion = "What is 3 + 5?";
-            startRound();
+            roundActive = false;
+            io.emit("log", `Round ended! Correct answer was ${currentAnswer}. Click 'Next Round' to continue.`);
         }
     }, 1000);
+}
+
+function nextRound() {
+    if (!roundActive) startRound();
 }
 
 io.on("connection", (socket) => {
@@ -40,17 +78,14 @@ io.on("connection", (socket) => {
         players[socket.id] = { name: username, score: 0 };
         io.emit("players", Object.values(players));
         io.emit("log", `${username} joined the lobby`);
-
-        // Start first round if first player
-        if (Object.keys(players).length === 1) startRound();
     });
 
     socket.on("answer", (answer) => {
+        if (!roundActive) return;
         const player = players[socket.id];
         if (!player) return;
 
-        // Example correct answer checking
-        if (answer === "4") {
+        if (answer.trim() === currentAnswer) {
             player.score += 1;
             io.emit("log", `${player.name} got it right!`);
         } else {
@@ -58,6 +93,14 @@ io.on("connection", (socket) => {
         }
 
         io.emit("players", Object.values(players));
+    });
+
+    socket.on("startRound", () => {
+        if (!roundActive) startRound();
+    });
+
+    socket.on("nextRound", () => {
+        if (!roundActive) nextRound();
     });
 
     socket.on("disconnect", () => {
