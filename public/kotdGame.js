@@ -1,82 +1,94 @@
 const socket = io("https://aurlets.up.railway.app");
 
-let username = "";
-const lobby = document.getElementById("lobby");
-const gameArea = document.getElementById("gameArea");
-const playersList = document.getElementById("players");
-const logBox = document.getElementById("log");
-const questionBox = document.getElementById("question");
-const timerBox = document.getElementById("timer");
-const startBtn = document.getElementById("startBtn");
-const nextRoundBtnContainer = document.getElementById("nextRoundBtnContainer");
+let username="";
 
-function joinGame() {
-    username = document.getElementById("username").value.trim();
-    if (!username) return;
+const lobby=document.getElementById("lobby");
+const gameArea=document.getElementById("gameArea");
 
-    socket.emit("join", username);
-    lobby.classList.add("hidden");
-    gameArea.classList.remove("hidden");
-    startBtn.classList.remove("hidden");
-    log(`You joined the lobby as ${username}`);
+const playersList=document.getElementById("players");
+const logBox=document.getElementById("log");
+
+const questionBox=document.getElementById("question");
+const timerBox=document.getElementById("timer");
+
+
+// join lobby
+function joinGame(){
+
+username=document.getElementById("username").value.trim();
+
+if(!username) return;
+
+socket.emit("join",username);
+
+lobby.classList.add("hidden");
+gameArea.classList.remove("hidden");
+
+log("Joined lobby as "+username);
+
 }
 
-function startGame() {
-    socket.emit("startRound");
-    startBtn.classList.add("hidden");
+
+// submit answer
+function submitAnswer(){
+
+const answer=document.getElementById("answer").value.trim();
+
+if(!answer) return;
+
+socket.emit("answer",answer);
+
+document.getElementById("answer").value="";
+
 }
 
-function nextRound() {
-    socket.emit("startRound");
-    nextRoundBtnContainer.classList.add("hidden");
-}
 
-function submitNumber() {
-    const number = document.getElementById("answer").value.trim();
-    if (!number) return;
-    socket.emit("submitNumber", number);
-    document.getElementById("answer").value = "";
-}
+// players list
+socket.on("players",(players)=>{
 
-// Socket events
-socket.on("players", (players) => {
-    playersList.innerHTML = "";
-    players.forEach(p => {
-        const li = document.createElement("li");
-        li.textContent = `${p.name} — ${p.lives} ❤️`;
-        playersList.appendChild(li);
-    });
+playersList.innerHTML="";
+
+players.forEach(player=>{
+
+const li=document.createElement("li");
+
+const hearts="❤️".repeat(player.lives);
+
+li.innerText=`${player.name} — ⭐${player.score} ${hearts}`;
+
+playersList.appendChild(li);
+
 });
 
-socket.on("roundStart", ({ roundTime }) => {
-    questionBox.textContent = `Enter a number for this round!`;
-    timerBox.textContent = roundTime;
 });
 
-socket.on("timer", (t) => {
-    timerBox.textContent = t;
-    if (t === 0) nextRoundBtnContainer.classList.remove("hidden");
+
+// question
+socket.on("question",(q)=>{
+questionBox.innerText=q;
 });
 
-socket.on("roundResult", (data) => {
-    log(`Round results! Target: ${data.target}`);
-    for (let id in data.numbers) {
-        log(`${data.numbers[id]}`);
-    }
+
+// timer
+socket.on("timer",(t)=>{
+timerBox.innerText=t;
 });
 
-socket.on("log", (msg) => log(msg));
-socket.on("eliminated", () => {
-    log("You have been eliminated!");
-});
-socket.on("gameOver", (winner) => {
-    log(`🏆 Game Over! Winner: ${winner.name}`);
+
+// logs
+socket.on("log",(msg)=>{
+log(msg);
 });
 
-// Helper to log messages
-function log(msg) {
-    const div = document.createElement("div");
-    div.textContent = msg;
-    logBox.appendChild(div);
-    logBox.scrollTop = logBox.scrollHeight;
+
+function log(text){
+
+const div=document.createElement("div");
+
+div.innerText=text;
+
+logBox.appendChild(div);
+
+logBox.scrollTop=logBox.scrollHeight;
+
 }
