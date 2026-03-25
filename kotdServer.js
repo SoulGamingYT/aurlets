@@ -11,9 +11,10 @@ const io = new Server(server, {
 app.use(express.static("public"));
 
 let players = {}; // { socketId: { name, lives, lastNumber } }
+let hostId = null;
 let roundActive = false;
 let roundNumbers = {};
-let roundTime = 20; // seconds
+let roundTime = 20;
 let timerInterval = null;
 
 // Start a round
@@ -82,7 +83,7 @@ function resolveRound() {
 
     // Remove life from losers
     losers.forEach(id => {
-        if (id !== winnerId) {
+        if (id !== winnerId && players[id]) {
             players[id].lives--;
             if (players[id].lives <= 0) {
                 io.to(id).emit("eliminated");
@@ -108,15 +109,20 @@ function checkWinner() {
         const winner = players[remaining[0]];
         io.emit("log", `🏆 ${winner.name} wins the game!`);
         io.emit("gameOver", winner);
-        players = {}; // reset game
+        players = {};
+        hostId = null;
     } else if (remaining.length === 0) {
         io.emit("log", "No players left. Game over.");
+        hostId = null;
     }
 }
 
 // Helper: player stats for leaderboard
 function getPlayerStats() {
-    return Object.values(players).map(p => ({ name: p.name, lives: p.lives }));
+    return Object.values(players).map(p => ({
+        name: p.name,
+        lives: p.lives
+    }));
 }
 
 io.on("connection", (socket) => {
@@ -124,8 +130,10 @@ io.on("connection", (socket) => {
 
     socket.on("join", (username) => {
         players[socket.id] = { name: username, lives: 5, lastNumber: null };
+        if (!hostId) hostId = socket.id; // first player is host
         io.emit("players", getPlayerStats());
         io.emit("log", `${username} joined the lobby.`);
+        io.emit("host", hostId); // broadcast host to all clients
     });
 
     socket.on("submitNumber", (num) => {
@@ -135,18 +143,21 @@ io.on("connection", (socket) => {
 
         roundNumbers[socket.id] = parsed;
         players[socket.id].lastNumber = parsed;
-        io.emit("log", `${players[socket.id].name} submitted a number.`);
+        io.emit("log", `${players[socket.id]?.name || "Unknown"} submitted a number.`);
     });
 
     socket.on("startRound", () => {
-        if (!roundActive) startRound();
+        if (!roundActive && socket.id === hostId) startRound();
     });
 
     socket.on("disconnect", () => {
-        if (players[socket.id]) {
-            io.emit("log", `${players[socket.id].name} left the game.`);
-            delete players[socket.id];
-            io.emit("players", getPlayerStats());
+        if (players[socket.id]) io.emit("log", `${players[socket.id].name} left the game.`);
+        delete players[socket.id];
+        io.emit("players", getPlayerStats());
+        // Reassign host if host leaves
+        if (hostId === socket.id) {
+            hostId = Object.keys(players)[0] || null;
+            io.emit("host", hostId);
         }
     });
 });
