@@ -1,21 +1,56 @@
-const socket = io("https://aurlets.up.railway.app");
+const socket = io();
 
+let username = "";
+const lobby = document.getElementById("lobby");
+const gameArea = document.getElementById("gameArea");
 const playersList = document.getElementById("players");
+const logBox = document.getElementById("log");
+const questionBox = document.getElementById("question");
+const timerBox = document.getElementById("timer");
 
+function joinGame() {
+    username = document.getElementById("username").value.trim();
+    if (!username) return;
+
+    socket.emit("join", username);
+
+    lobby.classList.add("hidden");
+    gameArea.classList.remove("hidden");
+
+    log(`You joined the lobby as ${username}`);
+}
+
+function submitAnswer() {
+    const answer = document.getElementById("answer").value.trim();
+    if (!answer) return;
+    socket.emit("answer", answer);
+    document.getElementById("answer").value = "";
+}
+
+// Update player list
 socket.on("players", (players) => {
     playersList.innerHTML = "";
-
-    Object.entries(players).forEach(([id, player]) => {
+    players.forEach(p => {
         const li = document.createElement("li");
-        li.textContent = id + " : " + player.score;
+        li.textContent = `${p.name} — ${p.score}`;
         playersList.appendChild(li);
     });
 });
 
-function submitAnswer(){
-    const answer = document.getElementById("answer").value;
+// Update puzzle question
+socket.on("question", (q) => {
+    questionBox.textContent = q;
+});
 
-    const correct = answer === "4"; // example puzzle answer
+// Update timer
+socket.on("timer", (t) => {
+    timerBox.textContent = t;
+});
 
-    socket.emit("answer", {correct});
-}
+// Game log
+socket.on("log", (msg) => {
+    const div = document.createElement("div");
+    div.textContent = msg;
+    logBox.appendChild(div);
+    logBox.scrollTop = logBox.scrollHeight;
+});
