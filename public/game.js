@@ -7,6 +7,8 @@ const playersList = document.getElementById("players");
 const logBox = document.getElementById("log");
 const questionBox = document.getElementById("question");
 const timerBox = document.getElementById("timer");
+const startBtn = document.getElementById("startBtn");
+const nextRoundBtnContainer = document.getElementById("nextRoundBtnContainer");
 
 function joinGame() {
     username = document.getElementById("username").value.trim();
@@ -16,8 +18,19 @@ function joinGame() {
 
     lobby.classList.add("hidden");
     gameArea.classList.remove("hidden");
+    startBtn.classList.remove("hidden"); // show Start Game button
 
     log(`You joined the lobby as ${username}`);
+}
+
+function startGame() {
+    socket.emit("startRound");
+    startBtn.classList.add("hidden"); // hide start button
+}
+
+function nextRound() {
+    socket.emit("nextRound");
+    nextRoundBtnContainer.classList.add("hidden"); // hide next round button until round ends
 }
 
 function submitAnswer() {
@@ -45,6 +58,9 @@ socket.on("question", (q) => {
 // Update timer
 socket.on("timer", (t) => {
     timerBox.textContent = t;
+    if (t === 0) {
+        nextRoundBtnContainer.classList.remove("hidden"); // show Next Round button
+    }
 });
 
 // Game log
