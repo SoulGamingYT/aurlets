@@ -1,4 +1,4 @@
-const socket = io();
+const socket = io("https://aurlets.up.railway.app");
 
 let username = "";
 const lobby = document.getElementById("lobby");
