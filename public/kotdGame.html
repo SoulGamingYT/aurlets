@@ -1,125 +1,158 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>King of Diamonds - Aurlets</title>
 
-<title>Aurlets Game</title>
-
+<!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
+<!-- Socket.io -->
 <script src="/socket.io/socket.io.js"></script>
 
 <style>
-
-body{
-background:#000;
-color:white;
-font-family:system-ui;
+body {
+  background: #000;
+  color: white;
+  font-family: system-ui;
 }
 
-.card{
-background:#111;
-border:1px solid #222;
-border-radius:15px;
-padding:20px;
-margin:20px;
+.topbar {
+  text-align: center;
+  padding: 30px;
+  border-bottom: 1px solid #222;
 }
 
-.input{
-width:100%;
-padding:10px;
-border-radius:10px;
-background:#000;
-border:1px solid #333;
-margin-bottom:10px;
+.title {
+  font-size: 40px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #ec4899, #8b5cf6);
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
-.btn{
-padding:10px 20px;
-border-radius:10px;
-background:linear-gradient(90deg,#8b5cf6,#ec4899);
-cursor:pointer;
+.subtitle {
+  color: #9ca3af;
+  margin-top: 5px;
 }
 
-.timer{
-font-size:30px;
-color:#f87171;
-margin-top:10px;
+.container {
+  max-width: 1000px;
+  margin: auto;
+  padding: 40px;
+  display: grid;
+  gap: 25px;
 }
 
-.log{
-height:120px;
-overflow:auto;
-font-size:14px;
-color:#9ca3af;
+.card {
+  background: #111;
+  border: 1px solid #222;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, .6);
 }
 
-.hidden{
-display:none;
+.card-title {
+  font-size: 20px;
+  margin-bottom: 15px;
+  font-weight: 700;
 }
 
+.input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  background: #000;
+  border: 1px solid #333;
+  margin-bottom: 10px;
+}
+
+.btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #8b5cf6, #ec4899);
+  cursor: pointer;
+  transition: .2s;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+.question {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.answer-area {
+  display: flex;
+  gap: 10px;
+}
+
+.timer {
+  font-size: 28px;
+  margin-top: 20px;
+  color: #f87171;
+}
+
+.log {
+  height: 120px;
+  overflow: auto;
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.hidden {
+  display: none;
+}
 </style>
 
 </head>
-
 <body>
 
-<div id="lobby" class="card">
+<header class="topbar">
+  <h1 class="title">King of Diamonds</h1>
+  <p class="subtitle">Aurlets Multiplayer Logic Game</p>
+</header>
 
-<h2>Join Game</h2>
+<main class="container">
 
-<input id="username" class="input" placeholder="Enter name">
+  <!-- Lobby -->
+  <div id="lobby" class="card">
+    <h2 class="card-title">Join Game</h2>
+    <input id="username" class="input" placeholder="Enter your name">
+    <button onclick="joinGame()" class="btn">Join Lobby</button>
+  </div>
 
-<button onclick="joinGame()" class="btn">
-Join Lobby
-</button>
+  <!-- Game Area -->
+  <div id="gameArea" class="hidden">
 
-</div>
+    <!-- Question Card -->
+    <div class="card">
+      <h2 class="card-title">Puzzle</h2>
+      <div id="question" class="question">Waiting for round...</div>
+      <div class="answer-area">
+        <input id="answer" class="input" placeholder="Your answer">
+        <button onclick="submitAnswer()" class="btn">Submit</button>
+      </div>
+      <div id="timer" class="timer">0</div>
+    </div>
 
+    <!-- Players Card -->
+    <div class="card">
+      <h2 class="card-title">Players</h2>
+      <ul id="players"></ul>
+    </div>
 
-<div id="gameArea" class="hidden">
+    <!-- Game Log -->
+    <div class="card">
+      <h2 class="card-title">Game Log</h2>
+      <div id="log" class="log"></div>
+    </div>
 
-<div class="card">
-
-<h2>Puzzle</h2>
-
-<div id="question">
-Waiting for players...
-</div>
-
-<input id="answer" class="input" placeholder="Your answer">
-
-<button onclick="submitAnswer()" class="btn">
-Submit
-</button>
-
-<div id="timer" class="timer">0</div>
-
-</div>
-
-
-<div class="card">
-
-<h2>Players</h2>
-
-<ul id="players"></ul>
-
-</div>
-
-
-<div class="card">
-
-<h2>Game Log</h2>
-
-<div id="log" class="log"></div>
-
-</div>
-
-</div>
-
+  </div>
+</main>
 
 <script src="kotdGame.js"></script>
-
 </body>
 </html>
