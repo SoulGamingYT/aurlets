@@ -1,4 +1,4 @@
-const socket = io("https://aurlets.up.railway.app");
+const socket = io("/math");
 
 const playersList = document.getElementById("players");
 const logBox = document.getElementById("log");
