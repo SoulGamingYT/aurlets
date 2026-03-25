@@ -1,34 +1,38 @@
-const express = require('express');
+const express = require("express");
+const http = require("http");
+const { Server } = require("socket.io");
+
 const app = express();
-const PORT = process.env.PORT || 3000;
+const server = http.createServer(app);
+const io = new Server(server);
 
-app.use(express.json());
+app.use(express.static("public"));
 
-// 1️⃣ Website status endpoint
-app.get('/api/status', (req, res) => {
-  res.json({ online: true });
+let players = {};
+
+io.on("connection", (socket) => {
+    console.log("Player connected:", socket.id);
+
+    players[socket.id] = {
+        score: 0
+    };
+
+    io.emit("players", players);
+
+    socket.on("answer", (data) => {
+        if (data.correct) {
+            players[socket.id].score += 1;
+        }
+
+        io.emit("players", players);
+    });
+
+    socket.on("disconnect", () => {
+        delete players[socket.id];
+        io.emit("players", players);
+    });
 });
 
-// 2️⃣ AFK points endpoint
-const afkPointsData = {
-  "12345": 10,
-  "67890": 5
-};
-app.get('/api/afk/:userId', (req, res) => {
-  const userId = req.params.userId;
-  res.json({ afkPoints: afkPointsData[userId] || 0 });
-});
-
-// 3️⃣ Updates endpoint
-const updatesData = [
-  { title: "New Feature", description: "AFK system added!" },
-  { title: "Website Update", description: "Improved dashboard" }
-];
-app.get('/api/updates', (req, res) => {
-  res.json({ updates: updatesData });
-});
-
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+server.listen(3000, () => {
+    console.log("Game server running on port 3000");
 });
