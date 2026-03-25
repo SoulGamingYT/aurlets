@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurlets Games</title>
+<link rel="icon" href="https://i.postimg.cc/DZF2WXYD/aurlets.webp">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="/socket.io/socket.io.js"></script>
+<link rel="stylesheet" href="game.css">
+</head>
+<body class="bg-black text-white font-sans">
+
+<header class="text-center p-8 border-b border-gray-800">
+    <h1 class="text-4xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 text-transparent bg-clip-text">
+        King of Diamonds
+    </h1>
+    <p class="text-gray-400 mt-2">Aurlets Multiplayer Logic Game</p>
+</header>
+
+<main class="max-w-3xl mx-auto p-8 grid gap-6">
+    <!-- Lobby -->
+    <div id="lobby" class="bg-gray-900 border border-gray-800 rounded-xl p-6 shadow-lg">
+        <h2 class="text-2xl font-bold mb-4">Join Game</h2>
+        <input id="username" class="w-full p-3 rounded-lg mb-4 bg-black border border-gray-700" placeholder="Enter name">
+        <button onclick="joinGame()" class="px-6 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:scale-105 transition-transform">
+            Join Lobby
+        </button>
+    </div>
+
+    <!-- Game Area -->
+    <div id="gameArea" class="hidden grid gap-6">
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 shadow-lg">
+            <h2 class="text-2xl font-bold mb-4">Puzzle</h2>
+            <div id="question" class="text-xl mb-4">Waiting for round...</div>
+            <div class="flex gap-3">
+                <input id="answer" class="flex-1 p-3 rounded-lg bg-black border border-gray-700" placeholder="Your answer">
+                <button onclick="submitAnswer()" class="px-6 py-3 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 hover:scale-105 transition-transform">
+                    Submit
+                </button>
+            </div>
+            <div id="timer" class="text-red-500 text-2xl mt-4">0</div>
+        </div>
+
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 shadow-lg">
+            <h2 class="text-2xl font-bold mb-4">Players</h2>
+            <ul id="players" class="list-disc list-inside"></ul>
+        </div>
+
+        <div class="bg-gray-900 border border-gray-800 rounded-xl p-6 shadow-lg">
+            <h2 class="text-2xl font-bold mb-4">Game Log</h2>
+            <div id="log" class="h-32 overflow-auto text-gray-400 text-sm"></div>
+        </div>
+    </div>
+</main>
+
+<script src="game.js"></script>
+</body>
+</html>
