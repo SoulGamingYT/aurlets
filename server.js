@@ -4,113 +4,94 @@ const { Server } = require("socket.io");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
-    cors: { origin: "*", methods: ["GET", "POST"] }
-});
+const io = new Server(server);
 
 app.use(express.static("public"));
 
-let players = {};
-let roundActive = false;
-let timerInterval = null;
-let roundTime = 30;
-
+let players = {}; // { socketId: { name, score } }
 let currentQuestion = "";
-let currentAnswer = "";
+let currentAnswer = 0;
+let roundActive = false;
+let roundTime = 30; // first round
+let timerInterval = null;
+let roundCount = 0;
 
-// Utility: generate a random integer between min and max (inclusive)
-function randInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-// Generate random math question
+// Generate random arithmetic question
 function generateQuestion() {
-    const operations = ["+", "-", "*", "/"];
-    const op = operations[randInt(0, operations.length - 1)];
-    let a = randInt(1, 20);
-    let b = randInt(1, 20);
+  const ops = ["+", "-", "*", "/"];
+  const op = ops[Math.floor(Math.random() * ops.length)];
+  let a = Math.floor(Math.random() * 20) + 1;
+  let b = Math.floor(Math.random() * 20) + 1;
 
-    if (op === "/") {
-        // Ensure integer division
-        a = a * b;
-        currentAnswer = (a / b).toString();
-    } else if (op === "+") {
-        currentAnswer = (a + b).toString();
-    } else if (op === "-") {
-        currentAnswer = (a - b).toString();
-    } else if (op === "*") {
-        currentAnswer = (a * b).toString();
-    }
+  if (op === "/") {
+    a = a * b; // integer division
+    currentAnswer = a / b;
+  } else if (op === "+") {
+    currentAnswer = a + b;
+  } else if (op === "-") {
+    currentAnswer = a - b;
+  } else if (op === "*") {
+    currentAnswer = a * b;
+  }
 
-    currentQuestion = `${a} ${op} ${b} = ?`;
+  currentQuestion = `${a} ${op} ${b} = ?`;
 }
 
 // Start a round
 function startRound() {
-    roundActive = true;
-    generateQuestion();
-    io.emit("question", currentQuestion);
+  if (Object.keys(players).length < 2) {
+    io.emit("log", "Waiting for more players...");
+    return;
+  }
 
-    let countdown = roundTime;
+  roundActive = true;
+  generateQuestion();
+  io.emit("question", currentQuestion);
+  io.emit("log", `Round ${roundCount + 1} started!`);
+
+  let countdown = roundTime;
+  io.emit("timer", countdown);
+
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    countdown--;
     io.emit("timer", countdown);
-
-    clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-        countdown--;
-        io.emit("timer", countdown);
-
-        if (countdown <= 0) {
-            clearInterval(timerInterval);
-            roundActive = false;
-            io.emit("log", `Round ended! Correct answer was ${currentAnswer}. Click 'Next Round' to continue.`);
-        }
-    }, 1000);
-}
-
-function nextRound() {
-    if (!roundActive) startRound();
+    if (countdown <= 0) {
+      clearInterval(timerInterval);
+      roundActive = false;
+      io.emit("log", `Round ended! Correct answer: ${currentAnswer}`);
+      roundCount++;
+      roundTime = 15; // subsequent rounds
+      startRound();
+    }
+  }, 1000);
 }
 
 io.on("connection", (socket) => {
-    console.log("Player connected:", socket.id);
+  console.log("Player connected:", socket.id);
+  players[socket.id] = { name: socket.id, score: 0 };
+  io.emit("players", Object.values(players));
+  io.emit("log", `Player joined: ${socket.id}`);
 
-    socket.on("join", (username) => {
-        players[socket.id] = { name: username, score: 0 };
-        io.emit("players", Object.values(players));
-        io.emit("log", `${username} joined the lobby`);
-    });
+  // Auto start first round when at least 2 players join
+  if (!roundActive && Object.keys(players).length >= 2) {
+    startRound();
+  }
 
-    socket.on("answer", (answer) => {
-        if (!roundActive) return;
-        const player = players[socket.id];
-        if (!player) return;
+  socket.on("answer", (data) => {
+    if (!roundActive) return;
+    if (parseFloat(data) === currentAnswer) {
+      players[socket.id].score += 1;
+      io.emit("log", `${players[socket.id].name} answered correctly!`);
+    }
+    io.emit("players", Object.values(players));
+  });
 
-        if (answer.trim() === currentAnswer) {
-            player.score += 1;
-            io.emit("log", `${player.name} got it right!`);
-        } else {
-            io.emit("log", `${player.name} answered: ${answer}`);
-        }
-
-        io.emit("players", Object.values(players));
-    });
-
-    socket.on("startRound", () => {
-        if (!roundActive) startRound();
-    });
-
-    socket.on("nextRound", () => {
-        if (!roundActive) nextRound();
-    });
-
-    socket.on("disconnect", () => {
-        const player = players[socket.id];
-        if (player) io.emit("log", `${player.name} left the game`);
-        delete players[socket.id];
-        io.emit("players", Object.values(players));
-    });
+  socket.on("disconnect", () => {
+    delete players[socket.id];
+    io.emit("players", Object.values(players));
+    io.emit("log", `Player disconnected: ${socket.id}`);
+  });
 });
 
-server.listen(3000, () => {
-    console.log("Game server running on port 3000");
-});
+server.listen(3000, () => console.log("Server running on port 3000"));
