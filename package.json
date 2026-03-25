@@ -4,7 +4,8 @@
   "type": "commonjs",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start:kotd": "node kotdserver.js",
+    "start:maths": "node server.js"
   },
   "dependencies": {
     "express": "^5.2.1",
