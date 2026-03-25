@@ -4,162 +4,144 @@ const { Server } = require("socket.io");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {
-    cors: { origin: "*", methods: ["GET", "POST"] }
-});
+const io = new Server(server);
 
 app.use(express.static("public"));
 
-let players = {}; // { socketId: { name, lives, lastNumber } }
-let hostId = null;
+let players = {};
+let currentQuestion = "";
+let currentAnswer = 0;
+
 let roundActive = false;
-let roundNumbers = {};
-let roundTime = 20;
-let timerInterval = null;
+let roundCount = 0;
+let timerInterval;
 
-// Start a round
-function startRound() {
-    if (Object.keys(players).length < 2) {
-        io.emit("log", "Not enough players for a round.");
-        return;
-    }
 
-    roundActive = true;
-    roundNumbers = {};
-    io.emit("log", "Round started! Enter your number.");
-    io.emit("roundStart", { roundTime, players: getPlayerStats() });
+// generate math question
+function generateQuestion(){
 
-    let countdown = roundTime;
-    io.emit("timer", countdown);
-    clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-        countdown--;
-        io.emit("timer", countdown);
-        if (countdown <= 0) {
-            clearInterval(timerInterval);
-            resolveRound();
-        }
-    }, 1000);
+const ops = ["+","-","*"];
+const op = ops[Math.floor(Math.random()*ops.length)];
+
+let a = Math.floor(Math.random()*20)+1;
+let b = Math.floor(Math.random()*20)+1;
+
+if(op==="+") currentAnswer = a+b;
+if(op==="-") currentAnswer = a-b;
+if(op==="*") currentAnswer = a*b;
+
+currentQuestion = `${a} ${op} ${b} = ?`;
+
 }
 
-// Resolve round results
-function resolveRound() {
-    roundActive = false;
 
-    const numbers = Object.values(roundNumbers);
-    if (numbers.length === 0) {
-        io.emit("log", "No numbers submitted. Round skipped.");
-        return;
-    }
+// start round
+function startRound(){
 
-    const avg = numbers.reduce((a, b) => a + b, 0) / numbers.length;
-    const target = avg * 0.8;
-
-    // Find winner and farthest players
-    let closestDiff = Infinity;
-    let winnerIds = [];
-    let farthestDiff = -Infinity;
-    let losers = [];
-
-    for (let id in roundNumbers) {
-        const diff = Math.abs(roundNumbers[id] - target);
-        if (diff < closestDiff) {
-            closestDiff = diff;
-            winnerIds = [id];
-        } else if (diff === closestDiff) {
-            winnerIds.push(id);
-        }
-
-        if (diff > farthestDiff) {
-            farthestDiff = diff;
-            losers = [id];
-        } else if (diff === farthestDiff) {
-            losers.push(id);
-        }
-    }
-
-    // Handle ties randomly
-    const winnerId = winnerIds[Math.floor(Math.random() * winnerIds.length)];
-
-    // Remove life from losers
-    losers.forEach(id => {
-        if (id !== winnerId && players[id]) {
-            players[id].lives--;
-            if (players[id].lives <= 0) {
-                io.to(id).emit("eliminated");
-                delete players[id];
-            }
-        }
-    });
-
-    io.emit("log", `Round ended! Target: ${target.toFixed(2)}. Winner: ${players[winnerId]?.name || "N/A"}`);
-    io.emit("roundResult", {
-        target: target.toFixed(2),
-        numbers: roundNumbers,
-        players: getPlayerStats()
-    });
-
-    checkWinner();
+if(Object.keys(players).length < 2){
+io.emit("log","Waiting for at least 2 players...");
+return;
 }
 
-// Check if only one player left
-function checkWinner() {
-    const remaining = Object.keys(players);
-    if (remaining.length === 1) {
-        const winner = players[remaining[0]];
-        io.emit("log", `🏆 ${winner.name} wins the game!`);
-        io.emit("gameOver", winner);
-        players = {};
-        hostId = null;
-    } else if (remaining.length === 0) {
-        io.emit("log", "No players left. Game over.");
-        hostId = null;
-    }
+roundActive = true;
+
+generateQuestion();
+
+let roundTime = roundCount === 0 ? 60 : 30;
+
+io.emit("question",currentQuestion);
+io.emit("log",`Round ${roundCount+1} started (${roundTime}s)`);
+
+let countdown = roundTime;
+
+io.emit("timer",countdown);
+
+clearInterval(timerInterval);
+
+timerInterval = setInterval(()=>{
+
+countdown--;
+
+io.emit("timer",countdown);
+
+if(countdown<=0){
+
+clearInterval(timerInterval);
+
+roundActive=false;
+
+io.emit("log",`Round ended! Correct answer: ${currentAnswer}`);
+
+roundCount++;
+
+setTimeout(startRound,3000);
+
 }
 
-// Helper: player stats for leaderboard
-function getPlayerStats() {
-    return Object.values(players).map(p => ({
-        name: p.name,
-        lives: p.lives
-    }));
+},1000);
+
 }
 
-io.on("connection", (socket) => {
-    console.log("Player connected:", socket.id);
 
-    socket.on("join", (username) => {
-        players[socket.id] = { name: username, lives: 5, lastNumber: null };
-        if (!hostId) hostId = socket.id; // first player is host
-        io.emit("players", getPlayerStats());
-        io.emit("log", `${username} joined the lobby.`);
-        io.emit("host", hostId); // broadcast host to all clients
-    });
+io.on("connection",(socket)=>{
 
-    socket.on("submitNumber", (num) => {
-        if (!roundActive) return;
-        const parsed = parseFloat(num);
-        if (isNaN(parsed)) return;
+console.log("Player connected:",socket.id);
 
-        roundNumbers[socket.id] = parsed;
-        players[socket.id].lastNumber = parsed;
-        io.emit("log", `${players[socket.id]?.name || "Unknown"} submitted a number.`);
-    });
 
-    socket.on("startRound", () => {
-        if (!roundActive && socket.id === hostId) startRound();
-    });
+// player joins
+socket.on("join",(username)=>{
 
-    socket.on("disconnect", () => {
-        if (players[socket.id]) io.emit("log", `${players[socket.id].name} left the game.`);
-        delete players[socket.id];
-        io.emit("players", getPlayerStats());
-        // Reassign host if host leaves
-        if (hostId === socket.id) {
-            hostId = Object.keys(players)[0] || null;
-            io.emit("host", hostId);
-        }
-    });
+players[socket.id]={
+name:username,
+score:0,
+lives:5
+};
+
+io.emit("players",Object.values(players));
+
+io.emit("log",`${username} joined the lobby`);
+
+if(!roundActive && Object.keys(players).length>=2){
+startRound();
+}
+
 });
 
-server.listen(3000, () => console.log("KOTD server running on port 3000"));
+
+// player answer
+socket.on("answer",(answer)=>{
+
+if(!roundActive) return;
+
+if(parseFloat(answer)===currentAnswer){
+
+players[socket.id].score++;
+
+io.emit("log",`${players[socket.id].name} answered correctly!`);
+
+io.emit("players",Object.values(players));
+
+}
+
+});
+
+
+// disconnect
+socket.on("disconnect",()=>{
+
+if(players[socket.id]){
+
+io.emit("log",`${players[socket.id].name} left`);
+
+delete players[socket.id];
+
+io.emit("players",Object.values(players));
+
+}
+
+});
+
+});
+
+
+server.listen(3000,()=>console.log("Game server running on port 3000"));
