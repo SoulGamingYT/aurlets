@@ -4,7 +4,6 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Aurlets</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -12,7 +11,7 @@
 <style>
 
 body{
-background:#0a0a0a;
+background:#000;
 color:white;
 font-family:system-ui;
 text-align:center;
@@ -21,7 +20,8 @@ overflow:hidden;
 }
 
 .glitch{
-animation:shake .1s infinite;
+animation:shake .15s infinite;
+filter:hue-rotate(90deg);
 }
 
 @keyframes shake{
@@ -38,13 +38,37 @@ background:white;
 color:black;
 padding:20px;
 border-radius:10px;
-box-shadow:0 0 20px rgba(0,0,0,.5);
+box-shadow:0 0 20px rgba(0,0,0,.6);
+font-weight:bold;
+}
+
+#progressBar{
+width:300px;
+height:20px;
+background:#222;
+margin:20px auto;
+border-radius:10px;
+overflow:hidden;
+}
+
+#bar{
+height:100%;
+width:0%;
+background:#ff006a;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:-1;
 }
 
 button{
 padding:12px 20px;
 background:#9333ea;
 border-radius:10px;
+margin-top:20px;
 }
 
 </style>
@@ -53,19 +77,71 @@ border-radius:10px;
 
 <body>
 
-<h1 id="title" class="text-5xl font-bold">
-Aurlets Games
-</h1>
+<canvas id="matrix"></canvas>
 
-<p class="mt-5 text-gray-400">
-Loading system modules...
+<h1 class="text-5xl font-bold">Aurlets Games</h1>
+
+<p class="text-gray-400 mt-5">
+Initializing systems...
 </p>
 
-<button id="start" class="mt-8">
+<div id="progressBar">
+<div id="bar"></div>
+</div>
+
+<p id="status">Loading modules...</p>
+
+<button id="start">
 Start Game
 </button>
 
 <script>
+
+/* MATRIX BACKGROUND */
+
+const canvas=document.getElementById("matrix")
+const ctx=canvas.getContext("2d")
+
+canvas.height=window.innerHeight
+canvas.width=window.innerWidth
+
+const letters="01AURLETS#$%"
+const fontSize=14
+const columns=canvas.width/fontSize
+
+const drops=[]
+
+for(let i=0;i<columns;i++){
+drops[i]=1
+}
+
+function draw(){
+
+ctx.fillStyle="rgba(0,0,0,0.05)"
+ctx.fillRect(0,0,canvas.width,canvas.height)
+
+ctx.fillStyle="#0f0"
+ctx.font=fontSize+"px monospace"
+
+for(let i=0;i<drops.length;i++){
+
+const text=letters[Math.floor(Math.random()*letters.length)]
+
+ctx.fillText(text,i*fontSize,drops[i]*fontSize)
+
+if(drops[i]*fontSize>canvas.height && Math.random()>0.975){
+drops[i]=0
+}
+
+drops[i]++
+
+}
+
+}
+
+setInterval(draw,33)
+
+/* RANDOM POPUPS */
 
 function random(min,max){
 return Math.random()*(max-min)+min
@@ -77,8 +153,8 @@ const popup=document.createElement("div")
 
 popup.className="popup"
 
-popup.style.left=random(0,window.innerWidth-200)+"px"
-popup.style.top=random(0,window.innerHeight-100)+"px"
+popup.style.left=Math.max(0,random(0,window.innerWidth-220))+"px"
+popup.style.top=Math.max(0,random(0,window.innerHeight-120))+"px"
 
 popup.innerText="System Error 0xAURLETS"
 
@@ -86,28 +162,69 @@ document.body.appendChild(popup)
 
 }
 
+/* PROGRESS BAR */
+
+let progress=0
+
+const bar=document.getElementById("bar")
+const status=document.getElementById("status")
+
+const messages=[
+"Connecting to server...",
+"Checking database...",
+"Deleting memes...",
+"Uploading cat videos...",
+"Installing anime...",
+"Deleting Aurlets servers..."
+]
+
+setInterval(()=>{
+
+progress+=5
+bar.style.width=progress+"%"
+
+status.innerText=messages[Math.floor(Math.random()*messages.length)]
+
+if(progress>=100){
+progress=0
+}
+
+},400)
+
+/* CHAOS MODE */
+
+let popupInterval
+
 setTimeout(()=>{
 
 document.body.classList.add("glitch")
 
-setInterval(createPopup,800)
+popupInterval=setInterval(createPopup,700)
 
-},3000)
+},4000)
+
+/* FINAL REVEAL */
 
 setTimeout(()=>{
 
+clearInterval(popupInterval)
+
 document.body.innerHTML=`
 
-<h1 style="font-size:60px">😂 APRIL FOOLS</h1>
+<div style="padding-top:120px">
 
-<p style="margin-top:20px;color:#aaa">
-Aurlets website is perfectly fine.
+<h1 style="font-size:70px">😂 APRIL FOOLS</h1>
+
+<p style="margin-top:20px;color:#aaa;font-size:18px">
+Aurlets servers are safe.
 You just got pranked.
 </p>
 
 <button onclick="location.href='/'">
 Return Home
 </button>
+
+</div>
 
 `
 
