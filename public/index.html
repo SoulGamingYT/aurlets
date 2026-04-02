@@ -3,99 +3,178 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aurlets 2.0</title>
+  <title>Aurlets</title>
   <link rel="icon" href="https://i.postimg.cc/DZF2WXYD/aurlets.webp" type="image/png">
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { margin:0; font-family:sans-serif; background:#000; color:#fff; overflow-x:hidden; }
-    .gradient-text { background: linear-gradient(90deg,#ff00ff,#8000ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-    .glow { text-shadow:0 0 20px rgba(255,0,255,0.7),0 0 40px rgba(128,0,255,0.7); }
-    .shake { animation: shake 0.15s infinite; }
-    @keyframes shake {
-      0%{transform:translate(2px,1px);}25%{transform:translate(-2px,-1px);}50%{transform:translate(1px,-2px);}75%{transform:translate(-1px,2px);}100%{transform:translate(2px,-1px);}
+    .gradient-text {
+      background: linear-gradient(90deg, #ff00ff, #8000ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    #launchOverlay {position:fixed;top:0;left:0;width:100%;height:100%;background:#111;display:flex;align-items:center;justify-content:center;z-index:10000;}
-    #launchOverlay button {padding:20px 40px; font-size:1.5rem; font-weight:bold; background:linear-gradient(90deg,#ff00ff,#8000ff); border:none; border-radius:12px; color:white; cursor:pointer; box-shadow:0 0 20px rgba(255,0,255,0.5);}
-    #mainContent {opacity:0; transition:opacity 1s;}
+    .glow {
+      text-shadow: 0 0 20px rgba(255,0,255,0.7), 0 0 40px rgba(128,0,255,0.7);
+    }
+    #tsparticles {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top:0; left:0;
+      z-index:-1;
+    }
+    @keyframes shake {
+      0% { transform: translate(2px,1px); }
+      25% { transform: translate(-2px,-1px); }
+      50% { transform: translate(1px,-2px); }
+      75% { transform: translate(-1px,2px); }
+      100% { transform: translate(2px,-1px); }
+    }
+    /* Launch overlay */
+    #launchOverlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #6a0dad, #ff00ff);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 100000;
+    }
+    #launchOverlay h1 {
+      font-size: 3rem;
+      color: white;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    #launchBtn {
+      padding: 1rem 2rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      background: linear-gradient(90deg, #ff00ff, #8000ff);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(255,0,255,0.7);
+      transition: transform 0.2s;
+    }
+    #launchBtn:hover {
+      transform: scale(1.05);
+    }
   </style>
 </head>
-<body>
+<body class="bg-black text-white font-sans">
 
-  <!-- Launch Overlay -->
+  <!-- LAUNCH OVERLAY -->
   <div id="launchOverlay">
-    <button id="launchBtn">🚀 Launch Website 2.0</button>
+    <h1>🚀 Launch Website 2.0</h1>
+    <button id="launchBtn">Click to Enter</button>
   </div>
 
-  <!-- MAIN HOMEPAGE CONTENT -->
-  <div id="mainContent">
-
-    <!-- HEADER -->
-    <header class="sticky top-0 z-50 bg-black/80 backdrop-blur border-b border-white/10 p-4 flex justify-between items-center">
-      <div class="flex items-center gap-3">
-        <img src="https://i.postimg.cc/DZF2WXYD/aurlets.webp" alt="Aurlets Logo" class="w-10 h-10 rounded">
-        <span class="text-2xl font-extrabold gradient-text glow">Aurlets</span>
-      </div>
-      <nav class="hidden md:flex gap-4 text-sm text-gray-300">
-        <a href="#" class="px-3 py-1 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow">Info</a>
-        <a href="#" class="px-3 py-1 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow">Announcements</a>
-        <a href="#" class="px-3 py-1 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow">Discord</a>
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 bg-black/80 backdrop-blur border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-3">
+        <img src="https://i.postimg.cc/DZF2WXYD/aurlets.webp" alt="Aurlets Logo" class="w-10 h-10 rounded"/>
+        <span class="text-2xl font-extrabold gradient-text glow tracking-wide">Aurlets</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm text-gray-300">
+        <a href="info.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition flex items-center gap-1">
+          <i class="fa-solid fa-bullhorn"></i> Info
+        </a>
+        <a href="announce.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition flex items-center gap-1">
+          <i class="fa-solid fa-circle-info"></i> Announcements
+        </a>
+        <a href="highlights.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition flex items-center gap-1">
+          <i class="fa-solid fa-circle-info"></i> Highlights
+        </a>
+        <a href="https://www.instagram.com/aurletss" target="_blank" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-red-500 shadow hover:scale-105 transition flex items-center gap-1">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+        <a href="https://www.tiktok.com/@aurletsofficial" target="_blank" class="px-4 py-2 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 shadow hover:scale-105 transition flex items-center gap-1">
+          <i class="fab fa-tiktok"></i> TikTok
+        </a>
+        <a href="https://discord.gg/aurlets" target="_blank" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-400 to-purple-600 shadow hover:scale-105 transition flex items-center gap-1">
+          <i class="fab fa-discord"></i> Discord
+        </a>
       </nav>
-    </header>
+      <button id="menu-btn" class="md:hidden text-white text-2xl"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </header>
 
-    <!-- HERO -->
-    <section class="relative overflow-hidden py-20" style="background-image:url('media/background.gif'); background-size:cover;">
-      <div class="absolute inset-0 bg-black/50"></div>
-      <div class="relative z-10 text-center max-w-5xl mx-auto px-6">
-        <img src="https://i.postimg.cc/DZF2WXYD/aurlets.webp" class="w-20 h-20 mx-auto mb-6 animate-bounce"/>
-        <h1 class="text-5xl md:text-6xl font-extrabold gradient-text glow">Aurlets – The Aura Farmers</h1>
-        <p class="mt-4 text-xl italic text-gray-300">“Young, Black and Rich”</p>
-      </div>
-    </section>
-
-    <!-- VIDEO -->
-    <section class="text-center py-20">
-      <h2 class="text-3xl font-bold mb-6 gradient-text glow">APRIL FOOLS 😂</h2>
-      <div style="width:90%; max-width:600px; aspect-ratio:16/9; margin:auto;">
-        <iframe id="mainVideo" width="100%" height="100%"
-          src="https://www.youtube.com/embed/Aq5WXmQQooo?enablejsapi=1"
-          frameborder="0"
-          allow="autoplay; encrypted-media; picture-in-picture"
-          allowfullscreen>
-        </iframe>
-      </div>
-    </section>
+  <!-- MOBILE MENU -->
+  <div id="side-menu" class="fixed top-0 left-0 w-64 h-full bg-black border-r border-gray-800 transform -translate-x-full transition-transform duration-300 z-50">
+    <div class="p-4 flex justify-between items-center border-b border-gray-700">
+      <h2 class="text-xl font-bold gradient-text bg-clip-text text-transparent">Aurlets</h2>
+      <button id="close-btn" class="text-white text-2xl"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <nav class="flex flex-col p-6 space-y-4 text-gray-300">
+      <a href="info.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Info</a>
+      <a href="announce.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition flex items-center gap-1"><i class="fa-solid fa-bullhorn"></i> Announcements</a>
+      <a href="highlights.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Highlights</a>
+      <a href="https://discord.gg/aurlets" target="_blank" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition flex items-center gap-1"><i class="fab fa-discord"></i> Join Discord</a>
+    </nav>
   </div>
+
+  <script>
+    document.getElementById("menu-btn").addEventListener("click", ()=>document.getElementById("side-menu").classList.remove("-translate-x-full"));
+    document.getElementById("close-btn").addEventListener("click", ()=>document.getElementById("side-menu").classList.add("-translate-x-full"));
+  </script>
+
+  <!-- HERO -->
+  <section class="relative overflow-hidden py-20" style="background-image:url('media/background.gif'); background-size:cover;">
+    <div class="absolute inset-0 bg-black/50"></div>
+    <div id="tsparticles"></div>
+    <div class="relative z-10 text-center max-w-5xl mx-auto px-6">
+      <img src="https://i.postimg.cc/DZF2WXYD/aurlets.webp" class="w-20 h-20 mx-auto mb-6 animate-bounce"/>
+      <h1 class="text-5xl md:text-6xl font-extrabold gradient-text glow">Aurlets – The Aura Farmers</h1>
+      <p class="mt-4 text-xl italic text-gray-300">“Young, Black and Rich”</p>
+      <p class="mt-6 text-gray-400 max-w-3xl mx-auto">A chill Pakistani Discord community for gamers, music lovers, anime enjoyers, and late-night vibers. Grow your aura with us. 🔥</p>
+    </div>
+  </section>
 
   <!-- AUDIO ELEMENTS -->
   <audio id="meowAudio" src="media/meow.mp3"></audio>
-  <audio id="fahhAudio" src="media/fahh.mp3" loop></audio>
-  <audio id="chickenAudio" src="media/chicken.mp3" loop></audio>
-  <audio id="aughAudio" src="media/augh.mp3" loop></audio>
+  <audio id="chaos1" src="media/fahh.mp3" loop></audio>
+  <audio id="chaos2" src="media/chicken.mp3" loop></audio>
+  <audio id="chaos3" src="media/augh.mp3" loop></audio>
+
+  <!-- tsparticles -->
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+  <script>
+    tsParticles.load("tsparticles",{
+      background:{color:"#0a0a0f"},
+      particles:{number:{value:80,density:{enable:true,value_area:800}},
+      color:{value:["#6a0dad","#4b0082","#1e90ff","#00bfff"]},
+      shape:{type:"circle"},
+      opacity:{value:0.7},
+      size:{value:{min:2,max:5}},
+      move:{enable:true,speed:1.5,direction:"none",out_mode:"out"}},  
+      interactivity:{events:{onhover:{enable:true,mode:"repulse"},onclick:{enable:true,mode:"push"}},
+      modes:{repulse:{distance:100},push:{particles_nb:4}}},
+      retina_detect:true
+    });
+  </script>
 
   <script>
     const launchBtn = document.getElementById("launchBtn");
-    const launchOverlay = document.getElementById("launchOverlay");
-    const mainContent = document.getElementById("mainContent");
+    const overlay = document.getElementById("launchOverlay");
 
-    launchBtn.addEventListener("click", () => {
-      // Show main content
-      launchOverlay.style.display = "none";
-      mainContent.style.opacity = "1";
-
-      // Play Meow Audio (prank start)
-      const meow = document.getElementById("meowAudio");
-      meow.play();
-
-      // Start Hack Prank after 3 seconds
-      setTimeout(() => startPrankFlow(), 3000);
+    launchBtn.addEventListener("click", ()=>{
+      overlay.remove(); // hide launch screen
+      startPrankFlow(); // start prank after homepage is visible
     });
 
     function startPrankFlow() {
-      // ======= SHAKE EFFECT =======
-      document.body.classList.add("shake");
+      // Play meow.mp3 first
+      const meow = document.getElementById("meowAudio");
+      meow.play().catch(()=>{}); // must be triggered by gesture
 
-      // ======= FAKE HACK BOX =======
+      // ===== SHAKE =====
+      document.body.style.animation = "shake 0.15s infinite";
+
+      // ===== HACK POPUPS =====
       const infoBox = document.createElement("div");
       infoBox.style.position = "fixed";
       infoBox.style.top = "20%";
@@ -111,7 +190,6 @@
       infoBox.innerHTML = "<h2>Initializing Security Scan...</h2>";
       document.body.appendChild(infoBox);
 
-      // ======= RANDOM ALERTS / POPUPS =======
       const popups = [
         "WARNING! SYSTEM BREACH DETECTED!",
         "ERROR 0x404: Aura Not Found",
@@ -121,41 +199,78 @@
         "Just Kidding 😎"
       ];
 
-      let i = 0;
-      const popupInterval = setInterval(() => {
-        if (i >= popups.length) {
+      let i=0;
+      const popupInterval = setInterval(()=>{
+        if(i>=popups.length){
           clearInterval(popupInterval);
-          showVideoOverlay(); // after fake hack complete
+          showVideoOverlay();
           return;
         }
         const popup = document.createElement("div");
-        popup.style.position = "fixed";
-        popup.style.top = Math.random()*80 + "%";
-        popup.style.left = Math.random()*80 + "%";
-        popup.style.background = "black";
-        popup.style.color = "red";
-        popup.style.border = "2px solid lime";
-        popup.style.padding = "10px";
-        popup.style.zIndex = 10001 + i;
-        popup.style.fontFamily = "monospace";
+        popup.style.position="fixed";
+        popup.style.top=Math.random()*80+"%";
+        popup.style.left=Math.random()*80+"%";
+        popup.style.background="black";
+        popup.style.color="red";
+        popup.style.border="2px solid lime";
+        popup.style.padding="10px";
+        popup.style.zIndex=10001+i;
+        popup.style.fontFamily="monospace";
         popup.innerText = popups[i];
         document.body.appendChild(popup);
-        setTimeout(()=>{popup.remove();},1500);
+        setTimeout(()=>popup.remove(),1500);
         i++;
-      }, 1000);
+      },1000);
 
-      // ======= VIDEO AUDIO CHAOS =======
-      function showVideoOverlay() {
-        infoBox.remove();
-        document.body.classList.remove("shake");
+      // ===== CHAOS AUDIO =====
+      setTimeout(()=>{
+        document.getElementById("chaos1").play().catch(()=>{});
+        document.getElementById("chaos2").play().catch(()=>{});
+        document.getElementById("chaos3").play().catch(()=>{});
+      }, popups.length*1000);
+    }
 
-        // Play chaotic audios
-        document.getElementById("fahhAudio").play();
-        document.getElementById("chickenAudio").play();
-        document.getElementById("aughAudio").play();
-      }
+    function showVideoOverlay(){
+      const infoBox = document.querySelector('div[style*="Initializing Security Scan"]');
+      if(infoBox) infoBox.remove();
+      document.body.style.animation = ""; // stop shaking
+
+      const overlay = document.createElement("div");
+      overlay.style.position="fixed";
+      overlay.style.top="0";
+      overlay.style.left="0";
+      overlay.style.width="100%";
+      overlay.style.height="100%";
+      overlay.style.background="rgba(0,0,0,0.95)";
+      overlay.style.zIndex="10000";
+      overlay.style.overflowY="auto";
+      overlay.style.display="flex";
+      overlay.style.flexDirection="column";
+      overlay.style.alignItems="center";
+      overlay.style.justifyContent="flex-start";
+      overlay.style.paddingTop="50px";
+
+      overlay.innerHTML=`
+        <h1 style="font-size:3rem; text-align:center; margin-bottom:20px; color:#fff;">APRIL FOOLS 😂</h1>
+        <div style="width:90%; max-width:600px; aspect-ratio:16/9;">
+          <iframe width="100%" height="100%"
+            src="https://www.youtube.com/embed/Aq5WXmQQooo?autoplay=1"
+            frameborder="0"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+        <p style="margin-top:20px;color:#aaa; text-align:center;">Relax... Aurlets just trolled you.</p>
+        <button id="returnBtn" style="margin-top:20px;padding:10px 25px;background:#9333ea;border-radius:8px;color:white;border:none; cursor:pointer;">
+          Return Home
+        </button>
+        <div style="height:50px;"></div>
+      `;
+      document.body.appendChild(overlay);
+      document.getElementById("returnBtn").addEventListener("click", ()=>{
+        overlay.remove();
+      });
     }
   </script>
-
 </body>
-</html>
+  </html>
