@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aurlets</title>
-  <link rel="icon" type="image/png" href="https://i.postimg.cc/DZF2WXYD/aurlets.webp">
+  <link rel="icon" href="https://i.postimg.cc/DZF2WXYD/aurlets.webp" type="image/png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -14,15 +14,21 @@
       -webkit-text-fill-color: transparent;
     }
     .glow {
-      text-shadow: 0 0 20px rgba(255, 0, 255, 0.7), 0 0 40px rgba(128, 0, 255, 0.7);
+      text-shadow: 0 0 20px rgba(255,0,255,0.7), 0 0 40px rgba(128,0,255,0.7);
     }
     #tsparticles {
       position: fixed;
       width: 100%;
       height: 100%;
-      top: 0;
-      left: 0;
-      z-index: -1;
+      top:0; left:0;
+      z-index:-1;
+    }
+    @keyframes shake {
+      0% { transform: translate(2px,1px); }
+      25% { transform: translate(-2px,-1px); }
+      50% { transform: translate(1px,-2px); }
+      75% { transform: translate(-1px,2px); }
+      100% { transform: translate(2px,-1px); }
     }
   </style>
 </head>
@@ -31,295 +37,165 @@
   <!-- HEADER -->
   <header class="sticky top-0 z-50 bg-black/80 backdrop-blur border-b border-white/10">
     <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-3 group">
-        <img src="https://i.postimg.cc/DZF2WXYD/aurlets.webp" alt="Aurlets Logo" class="w-10 h-10 rounded" />
-        <span class="text-2xl font-extrabold gradient-text soft-glow tracking-wide">Aurlets</span>
+      <a href="/" class="flex items-center gap-3">
+        <img src="https://i.postimg.cc/DZF2WXYD/aurlets.webp" alt="Aurlets Logo" class="w-10 h-10 rounded"/>
+        <span class="text-2xl font-extrabold gradient-text glow tracking-wide">Aurlets</span>
       </a>
       <nav class="hidden md:flex items-center gap-6 text-sm text-gray-300">
-        <a href="info.html" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition"><i class="fa-solid fa-bullhorn"></i><span>Information</span></a>
-        <a href="announce.html" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition"><i class="fa-solid fa-circle-info"></i><span>Announcements</span></a>
-        <a href="highlights.html" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition"><i class="fa-solid fa-circle-info"></i><span>Highlights</span></a>
-        <a href="https://www.instagram.com/aurletss" target="_blank" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-red-500 text-white font-semibold shadow-lg hover:scale-105 transition"><i class="fab fa-instagram"></i><span>Instagram</span></a>
-        <a href="https://www.tiktok.com/@aurletsofficial" target="_blank" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold shadow-lg hover:scale-105 transition"><i class="fab fa-tiktok"></i><span>TikTok</span></a>
-        <a href="https://discord.gg/aurlets" target="_blank" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-pink-400 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition"><i class="fab fa-discord"></i><span>Discord</span></a>
-        <!-- LOGIN AREA -->
-        <div><button id="login-btn" class="px-4 py-2 bg-blue-600 text-white rounded">Login with Discord</button>
-<div id="user-box" class="hidden items-center"></div>
-<script src="index.js"></script>
-</div>
+        <a href="info.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition flex items-center gap-1">
+          <i class="fa-solid fa-bullhorn"></i> Info
+        </a>
+        <a href="announce.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition flex items-center gap-1">
+          <i class="fa-solid fa-circle-info"></i> Announcements
+        </a>
+        <a href="highlights.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition flex items-center gap-1">
+          <i class="fa-solid fa-circle-info"></i> Highlights
+        </a>
+        <a href="https://www.instagram.com/aurletss" target="_blank" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-red-500 shadow hover:scale-105 transition flex items-center gap-1">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+        <a href="https://www.tiktok.com/@aurletsofficial" target="_blank" class="px-4 py-2 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 shadow hover:scale-105 transition flex items-center gap-1">
+          <i class="fab fa-tiktok"></i> TikTok
+        </a>
+        <a href="https://discord.gg/aurlets" target="_blank" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-400 to-purple-600 shadow hover:scale-105 transition flex items-center gap-1">
+          <i class="fab fa-discord"></i> Discord
+        </a>
       </nav>
+      <button id="menu-btn" class="md:hidden text-white text-2xl"><i class="fa-solid fa-bars"></i></button>
     </div>
-    <button id="menu-btn" class="md:hidden text-white text-2xl focus:outline-none">
-      <i class="fa-solid fa-bars"></i>
-    </button>
   </header>
 
-  <!-- Mobile sidemenu -->
+  <!-- MOBILE MENU -->
   <div id="side-menu" class="fixed top-0 left-0 w-64 h-full bg-black border-r border-gray-800 transform -translate-x-full transition-transform duration-300 z-50">
     <div class="p-4 flex justify-between items-center border-b border-gray-700">
-      <h2 class="text-xl font-bold bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">Aurlets</h2>
+      <h2 class="text-xl font-bold gradient-text bg-clip-text text-transparent">Aurlets</h2>
       <button id="close-btn" class="text-white text-2xl"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <nav class="flex flex-col p-6 space-y-4 text-gray-300">
-      <a href="info.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition"><i class="fa-solid fa-circle-info"></i> Info</a>
-      <a href="announce.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition"><i class="fa-solid fa-bullhorn"></i> Announcements</a>
-      <a href="highlights.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition"><i class="fa-solid fa-circle-info"></i> Highlights</a>
-      <a href="https://discord.gg/aurlets" target="_blank" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition"><i class="fa-brands fa-discord"></i> Join Discord</a>
-      <!-- Mobile LOGIN AREA -->
-      <div id="auth-area-mobile"></div>
+      <a href="info.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Info</a>
+      <a href="announce.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition flex items-center gap-1"><i class="fa-solid fa-bullhorn"></i> Announcements</a>
+      <a href="highlights.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition flex items-center gap-1"><i class="fa-solid fa-circle-info"></i> Highlights</a>
+      <a href="https://discord.gg/aurlets" target="_blank" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition flex items-center gap-1"><i class="fab fa-discord"></i> Join Discord</a>
     </nav>
   </div>
 
   <script>
-    document.getElementById("menu-btn").addEventListener("click", () => {
-      document.getElementById("side-menu").classList.remove("-translate-x-full");
-    });
-    document.getElementById("close-btn").addEventListener("click", () => {
-      document.getElementById("side-menu").classList.add("-translate-x-full");
-    });
+    document.getElementById("menu-btn").addEventListener("click", ()=>document.getElementById("side-menu").classList.remove("-translate-x-full"));
+    document.getElementById("close-btn").addEventListener("click", ()=>document.getElementById("side-menu").classList.add("-translate-x-full"));
   </script>
 
-  <!-- HERO SECTION -->
-  <section class="relative overflow-hidden py-20 aura-bg bg-cover bg-center" style="background-image: url('media/background.gif');">
-    <div class="absolute top-0 left-0 w-full h-full bg-black/50"></div>
+  <!-- HERO -->
+  <section class="relative overflow-hidden py-20" style="background-image:url('media/background.gif'); background-size:cover;">
+    <div class="absolute inset-0 bg-black/50"></div>
     <div id="tsparticles"></div>
-    <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
-      <img src="https://i.postimg.cc/DZF2WXYD/aurlets.webp" alt="Aurlets Flame" class="w-20 h-20 mx-auto mb-6 animate-bounce" />
-      <h1 class="text-5xl md:text-6xl font-extrabold gradient-text soft-glow">Aurlets – The Aura Farmers</h1>
+    <div class="relative z-10 text-center max-w-5xl mx-auto px-6">
+      <img src="https://i.postimg.cc/DZF2WXYD/aurlets.webp" class="w-20 h-20 mx-auto mb-6 animate-bounce"/>
+      <h1 class="text-5xl md:text-6xl font-extrabold gradient-text glow">Aurlets – The Aura Farmers</h1>
       <p class="mt-4 text-xl italic text-gray-300">“Young, Black and Rich”</p>
       <p class="mt-6 text-gray-400 max-w-3xl mx-auto">A chill Pakistani Discord community for gamers, music lovers, anime enjoyers, and late-night vibers. Grow your aura with us. 🔥</p>
     </div>
   </section>
 
-
-
-
+  <!-- ABOUT & DISCORD WIDGET -->
   <section class="max-w-6xl mx-auto py-20 px-6 text-center">
     <h3 class="text-4xl font-bold mb-8 gradient-text glow">About Us</h3>
     <p class="text-gray-300 leading-relaxed max-w-3xl mx-auto">
-      Aurlets is Pakistan’s most vibrant Discord hub. We’re a space where youth gather to vibe, game, and 
-      grow their aura together. From late-night gaming sessions to chill convos, our aura burns bright. 🔥
+      Aurlets is Pakistan’s most vibrant Discord hub. We’re a space where youth gather to vibe, game, and grow their aura together. From late-night gaming sessions to chill convos, our aura burns bright. 🔥
     </p>
-    <!--=======================================================================================================-->
     <div class="flex justify-center items-center min-h-screen">
-  <iframe src="https://discord.com/widget?id=1392526036520009779&theme=dark" 
-          width="500" height="500" 
-          allowtransparency="true" 
-          frameborder="0" 
-          sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts">
-  </iframe>
-</div>
-    <!--=======================================================================================================-->
-    </section>
-  
-<!--SOCIALSSSSSSSSSSSSSSSSSSSSSS-->
-<section class="max-w-4xl mx-auto py-20 px-6 text-center">
-  <h2 class="text-4xl font-extrabold gradient-text glow mb-6">🌐 Connect With Aurlets</h2>
-  <p class="text-gray-400 mb-12">Stay connected with us on your favorite platforms.</p>
-
-  <div class="flex flex-wrap justify-center gap-6">
-    
-    <a href="https://www.instagram.com/aurletss" target="_blank" 
-       class="flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-pink-500 to-red-500 text-white font-semibold shadow-lg hover:scale-105 transition">
-      <i class="fab fa-instagram text-2xl"></i>
-      <span>Instagram</span>
-    </a>
-
-   
-    <a href="https://www.tiktok.com/@aurletsofficial" target="_blank" 
-       class="flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold shadow-lg hover:scale-105 transition">
-      <i class="fab fa-tiktok text-2xl"></i>
-      <span>TikTok</span>
-    </a>
-
-   
-    <a href="https://discord.gg/aurlets" target="_blank" 
-       class="flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-pink-400 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition">
-      <i class="fab fa-discord text-2xl"></i>
-      <span>Discord</span>
-    </a>
-  </div>
-</section>
-<script src="https://kit.fontawesome.com/4b9d6f8e5a.js" crossorigin="anonymous"></script>
-
-  
-  <!-- EXTRA ITEMS LOL -->
-  <section class="bg-gray-900 py-20 px-6">
-    <h3 class="text-4xl font-bold mb-12 text-center gradient-text glow">Why Join Aurlets?</h3>
-    <div class="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto">
-      <div class="p-8 bg-black border border-gray-800 rounded-2xl hover:scale-105 transition shadow-lg">
-        <span class="text-4xl">🎮</span>
-        <h4 class="text-xl font-semibold mt-4 mb-2">Gaming</h4>
-        <p class="text-gray-400">Team up and dominate in your favorite games with Aurlets fam.</p>
-      </div>
-      <div class="p-8 bg-black border border-gray-800 rounded-2xl hover:scale-105 transition shadow-lg">
-        <span class="text-4xl">🎤</span>
-        <h4 class="text-xl font-semibold mt-4 mb-2">Chill Vibes</h4>
-        <p class="text-gray-400">Hop in voice chats, listen to music, and relax with friends.</p>
-      </div>
-      <div class="p-8 bg-black border border-gray-800 rounded-2xl hover:scale-105 transition shadow-lg">
-        <span class="text-4xl">🔥</span>
-        <h4 class="text-xl font-semibold mt-4 mb-2">Aura Farming</h4>
-        <p class="text-gray-400">Level up your aura through fun events and challenges.</p>
-      </div>
+      <iframe src="https://discord.com/widget?id=1392526036520009779&theme=dark" width="500" height="500" allowtransparency="true" frameborder="0" sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
     </div>
   </section>
 
-  <!-- AURA Rules +_+ -->
-  <section class="max-w-5xl mx-auto py-20 px-6">
-    <h3 class="text-4xl font-bold mb-8 gradient-text glow text-center">Community Rules</h3>
-    <ul class="list-disc pl-6 space-y-3 text-gray-300 max-w-3xl mx-auto text-left">
-      <li>Respect everyone — keep it chill & friendly.</li>
-      <li>No toxicity, hate speech, or harassment.</li>
-      <li>No spam or self-promo without permission.</li>
-      <li>Keep the vibes alive. 🌌</li>
-    </ul>
-  </section>
-
-  <section class="text-center py-20 bg-gradient-to-r from-pink-600 to-purple-700 relative overflow-hidden">
-    <div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.6),transparent)]"></div>
-    <h3 class="text-4xl font-bold mb-6">Join Aurlets Today</h3>
-    <p class="text-lg mb-8 text-gray-200">Be part of Pakistan’s chillest aura fam. 🚀</p>
-    <a href="https://discord.gg/aurlets" class="bg-black text-pink-400 font-bold px-8 py-3 rounded-full shadow-xl hover:bg-gray-900 transition">Join Our Discord</a>
-  </section>
-  
-  <section>
-    <div class="text-center my-12">
-  <h2 class="text-2xl font-extrabold gradient-text glow mb-6">🛠 Aurlets Staff Info</h2>
-  <a href="staff.html" class="px-6 py-3 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition">
-    Meet Our Staff
-  </a>
-</div>
-  </section>
-
-  <!--======== EID GIFT FEATURE =========£-->
-<section class="max-w-5xl mx-auto py-20 px-6 text-center">
-  <h3 class="text-4xl font-bold mb-10 gradient-text glow">🎁 Special Eid Gift</h3>
-
-  <a href="eid.html" target="_blank"
-     class="inline-block group">
-
-    <div class="w-72 h-72 mx-auto bg-black border border-gray-800 rounded-2xl shadow-lg 
-                hover:scale-105 transition duration-300 flex flex-col items-center justify-center p-6">
-
-      <!-- PFP -->
-      <img src="https://i.postimg.cc/ZK7XLcm1/44ffe0303632f252e97fcbf7bda62cdd.webp"
-           alt="Ded Inside"
-           class="w-24 h-24 rounded-full mb-4 border-2 border-purple-500 group-hover:scale-110 transition">
-
-      <!-- Name -->
-      <h4 class="text-xl font-semibold text-white">By Ded Inside</h4>
-
-      <!-- Username -->
-      <p class="text-gray-400 text-sm">@ded_inside13</p>
-
-      <!-- Small label -->
-      <p class="mt-4 text-xs text-purple-400">Click to view Eid Gift ✨</p>
-
+  <!-- SOCIALS -->
+  <section class="max-w-4xl mx-auto py-20 px-6 text-center">
+    <h2 class="text-4xl font-extrabold gradient-text glow mb-6">🌐 Connect With Aurlets</h2>
+    <p class="text-gray-400 mb-12">Stay connected with us on your favorite platforms.</p>
+    <div class="flex flex-wrap justify-center gap-6">
+      <a href="https://www.instagram.com/aurletss" target="_blank" class="flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-pink-500 to-red-500 text-white font-semibold shadow-lg hover:scale-105 transition">
+        <i class="fab fa-instagram text-2xl"></i> Instagram
+      </a>
+      <a href="https://www.tiktok.com/@aurletsofficial" target="_blank" class="flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold shadow-lg hover:scale-105 transition">
+        <i class="fab fa-tiktok text-2xl"></i> TikTok
+      </a>
+      <a href="https://discord.gg/aurlets" target="_blank" class="flex items-center gap-3 px-6 py-3 rounded-full bg-gradient-to-r from-pink-400 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition">
+        <i class="fab fa-discord text-2xl"></i> Discord
+      </a>
     </div>
-  </a>
-</section>
-  <!--=================================-->
+  </section>
+
+  <!-- FOOTER -->
   <footer class="bg-black p-6 text-center text-gray-500 border-t border-gray-800">
     © 2025 Aurlets | Built with 🔥 and Aura
   </footer>
 
-  <!-- tsparticles CDN -->
+  <!-- tsparticles -->
   <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
   <script>
-    tsParticles.load("tsparticles", {
-      background: { color: "#0a0a0f" },
-      particles: {
-        number: { value: 80, density: { enable: true, value_area: 800 } },
-        color: { value: ["#6a0dad", "#4b0082", "#1e90ff", "#00bfff"] },
-        shape: { type: "circle" },
-        opacity: { value: 0.7 },
-        size: { value: { min: 2, max: 5 } },
-        move: { enable: true, speed: 1.5, direction: "none", out_mode: "out" }
-      },
-      interactivity: {
-        events: { onhover: { enable: true, mode: "repulse" }, onclick: { enable: true, mode: "push" } },
-        modes: { repulse: { distance: 100 }, push: { particles_nb: 4 } }
-      },
-      retina_detect: true
+    tsParticles.load("tsparticles",{
+      background:{color:"#0a0a0f"},
+      particles:{number:{value:80,density:{enable:true,value_area:800}},
+      color:{value:["#6a0dad","#4b0082","#1e90ff","#00bfff"]},
+      shape:{type:"circle"},
+      opacity:{value:0.7},
+      size:{value:{min:2,max:5}},
+      move:{enable:true,speed:1.5,direction:"none",out_mode:"out"}},
+      interactivity:{events:{onhover:{enable:true,mode:"repulse"},onclick:{enable:true,mode:"push"}},
+      modes:{repulse:{distance:100},push:{particles_nb:4}}},
+      retina_detect:true
     });
   </script>
 
-  <!-- main login logic -->
-  <script src="index.js"></script>
-
-
-
-
-
-  
-  
-<!--PRANKKKKKKKKKKKKKKKKKKK-->
-
-<script>
-async function startPrankFlow() {
-
-  const infoBox = document.createElement("div");
-  infoBox.style.position = "fixed";
-  infoBox.style.top = "50%";
-  infoBox.style.left = "50%";
-  infoBox.style.transform = "translate(-50%,-50%)";
-  infoBox.style.background = "black";
-  infoBox.style.border = "2px solid red";
-  infoBox.style.padding = "25px";
-  infoBox.style.zIndex = "9999";
-  infoBox.style.textAlign = "center";
-  infoBox.style.fontFamily = "monospace";
-
-  infoBox.innerHTML = "<h2>Initializing Security Scan...</h2>";
+  <!-- PRANK SCRIPT -->
+  <script>
+async function startPrankFlow(){
+  const infoBox=document.createElement("div");
+  infoBox.style.position="fixed";
+  infoBox.style.top="50%";
+  infoBox.style.left="50%";
+  infoBox.style.transform="translate(-50%,-50%)";
+  infoBox.style.background="black";
+  infoBox.style.border="2px solid red";
+  infoBox.style.padding="25px";
+  infoBox.style.zIndex="9999";
+  infoBox.style.textAlign="center";
+  infoBox.style.fontFamily="monospace";
+  infoBox.innerHTML="<h2>Initializing Security Scan...</h2>";
   document.body.appendChild(infoBox);
 
-  /* GET IP */
-  let ip = "Unknown";
-  let city = "Unknown";
-  let country = "Unknown";
-
-  try {
-    const res = await fetch("https://ipapi.co/json/");
-    const data = await res.json();
-    ip = data.ip;
-    city = data.city;
-    country = data.country_name;
-  } catch(e){}
-
-  /* GET LOCATION */
-  let lat="Unknown", lon="Unknown";
-
+  let ip="Unknown",city="Unknown",country="Unknown";
+  try{
+    const res=await fetch("https://ipapi.co/json/");
+    const data=await res.json();
+    ip=data.ip; city=data.city; country=data.country_name;
+  }catch(e){}
+  
+  let lat="Unknown",lon="Unknown";
   if(navigator.geolocation){
     navigator.geolocation.getCurrentPosition(pos=>{
-      lat = pos.coords.latitude.toFixed(4);
-      lon = pos.coords.longitude.toFixed(4);
+      lat=pos.coords.latitude.toFixed(4);
+      lon=pos.coords.longitude.toFixed(4);
       showData();
     }, showData);
-  } else {
-    showData();
-  }
+  }else showData();
 
   function showData(){
-    infoBox.innerHTML = `
+    infoBox.innerHTML=`
       <h2 style="color:red">SECURITY TRACE DETECTED</h2>
       <p>IP Address: ${ip}</p>
       <p>Location: ${city}, ${country}</p>
       <p>Coordinates: ${lat}, ${lon}</p>
       <p style="color:orange;margin-top:10px">Uploading data...</p>
     `;
-
     setTimeout(glitchEffect,4000);
   }
 
   function glitchEffect(){
-
     document.body.style.animation="shake .15s infinite";
-
-    const overlay = document.createElement("div");
+    const overlay=document.createElement("div");
     overlay.style.position="fixed";
-    overlay.style.top="0";
-    overlay.style.left="0";
+    overlay.style.top=0;
+    overlay.style.left=0;
     overlay.style.width="100%";
     overlay.style.height="100%";
     overlay.style.background="rgba(0,0,0,0.95)";
@@ -328,7 +204,6 @@ async function startPrankFlow() {
     overlay.style.flexDirection="column";
     overlay.style.alignItems="center";
     overlay.style.justifyContent="center";
-
     overlay.innerHTML=`
       <h1 style="font-size:60px;margin-bottom:20px">APRIL FOOLS 😂</h1>
       <video width="600" autoplay controls>
@@ -339,16 +214,12 @@ async function startPrankFlow() {
         Return Home
       </button>
     `;
-
     document.body.appendChild(overlay);
   }
-
 }
 
-/* start prank after 5 seconds */
 setTimeout(startPrankFlow,5000);
-</script>
+  </script>
 
 </body>
-</html>
-
+          </html>
