@@ -1,236 +1,63 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aurlets</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<style>
-
-body{
-background:#000;
-color:white;
-font-family:system-ui;
-text-align:center;
-padding-top:100px;
-overflow:hidden;
-}
-
-.glitch{
-animation:shake .15s infinite;
-filter:hue-rotate(90deg);
-}
-
-@keyframes shake{
-0%{transform:translate(2px,1px)}
-25%{transform:translate(-2px,-1px)}
-50%{transform:translate(1px,-2px)}
-75%{transform:translate(-1px,2px)}
-100%{transform:translate(2px,-1px)}
-}
-
-.popup{
-position:fixed;
-background:white;
-color:black;
-padding:20px;
-border-radius:10px;
-box-shadow:0 0 20px rgba(0,0,0,.6);
-font-weight:bold;
-}
-
-#progressBar{
-width:300px;
-height:20px;
-background:#222;
-margin:20px auto;
-border-radius:10px;
-overflow:hidden;
-}
-
-#bar{
-height:100%;
-width:0%;
-background:#ff006a;
-}
-
-canvas{
-position:fixed;
-top:0;
-left:0;
-z-index:-1;
-}
-
-button{
-padding:12px 20px;
-background:#9333ea;
-border-radius:10px;
-margin-top:20px;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<canvas id="matrix"></canvas>
-
-<h1 class="text-5xl font-bold">Aurlets Games</h1>
-
-<p class="text-gray-400 mt-5">
-Initializing systems...
-</p>
-
-<div id="progressBar">
-<div id="bar"></div>
-</div>
-
-<p id="status">Loading modules...</p>
-
-<button id="start">
-Start Game
-</button>
-
+<!-- PRANK SCRIPT -->
 <script>
+async function startPrankFlow() {
 
-/* MATRIX BACKGROUND */
+  const infoBox = document.createElement("div");
+  infoBox.style.position = "fixed";
+  infoBox.style.top = "50%";
+  infoBox.style.left = "50%";
+  infoBox.style.transform = "translate(-50%,-50%)";
+  infoBox.style.background = "black";
+  infoBox.style.border = "2px solid red";
+  infoBox.style.padding = "25px";
+  infoBox.style.zIndex = "9999";
+  infoBox.style.textAlign = "center";
+  infoBox.style.fontFamily = "monospace";
 
-const canvas=document.getElementById("matrix")
-const ctx=canvas.getContext("2d")
+  infoBox.innerHTML = "<h2>Initializing Security Scan...</h2>";
+  document.body.appendChild(infoBox);
 
-canvas.height=window.innerHeight
-canvas.width=window.innerWidth
+  // wait 3 seconds before glitch
+  setTimeout(glitchEffect, 3000);
 
-const letters="01AURLETS#$%"
-const fontSize=14
-const columns=canvas.width/fontSize
+  function glitchEffect(){
 
-const drops=[]
+    document.body.style.animation="shake .15s infinite";
 
-for(let i=0;i<columns;i++){
-drops[i]=1
-}
+    const overlay = document.createElement("div");
+    overlay.style.position="fixed";
+    overlay.style.top="0";
+    overlay.style.left="0";
+    overlay.style.width="100%";
+    overlay.style.height="100%";
+    overlay.style.background="rgba(0,0,0,0.95)";
+    overlay.style.zIndex="10000";
+    overlay.style.display="flex";
+    overlay.style.flexDirection="column";
+    overlay.style.alignItems="center";
+    overlay.style.justifyContent="center";
 
-function draw(){
+    overlay.innerHTML=`
+      <h1 style="font-size:60px;margin-bottom:20px">APRIL FOOLS 😂</h1>
 
-ctx.fillStyle="rgba(0,0,0,0.05)"
-ctx.fillRect(0,0,canvas.width,canvas.height)
+      <iframe width="600" height="338"
+        src="https://www.youtube.com/embed/Aq5WXmQQooo?autoplay=1&mute=1"
+        frameborder="0"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        allowfullscreen>
+      </iframe>
 
-ctx.fillStyle="#0f0"
-ctx.font=fontSize+"px monospace"
+      <p style="margin-top:20px;color:#aaa">Relax... Aurlets just trolled you.</p>
+      <button onclick="location.reload()" style="margin-top:20px;padding:10px 25px;background:#9333ea;border-radius:8px">
+        Return Home
+      </button>
+    `;
 
-for(let i=0;i<drops.length;i++){
-
-const text=letters[Math.floor(Math.random()*letters.length)]
-
-ctx.fillText(text,i*fontSize,drops[i]*fontSize)
-
-if(drops[i]*fontSize>canvas.height && Math.random()>0.975){
-drops[i]=0
-}
-
-drops[i]++
-
-}
-
-}
-
-setInterval(draw,33)
-
-/* RANDOM POPUPS */
-
-function random(min,max){
-return Math.random()*(max-min)+min
-}
-
-function createPopup(){
-
-const popup=document.createElement("div")
-
-popup.className="popup"
-
-popup.style.left=Math.max(0,random(0,window.innerWidth-220))+"px"
-popup.style.top=Math.max(0,random(0,window.innerHeight-120))+"px"
-
-popup.innerText="System Error 0xAURLETS"
-
-document.body.appendChild(popup)
+    document.body.appendChild(overlay);
+  }
 
 }
 
-/* PROGRESS BAR */
-
-let progress=0
-
-const bar=document.getElementById("bar")
-const status=document.getElementById("status")
-
-const messages=[
-"Connecting to server...",
-"Checking database...",
-"Deleting memes...",
-"Uploading cat videos...",
-"Installing anime...",
-"Deleting Aurlets servers..."
-]
-
-setInterval(()=>{
-
-progress+=5
-bar.style.width=progress+"%"
-
-status.innerText=messages[Math.floor(Math.random()*messages.length)]
-
-if(progress>=100){
-progress=0
-}
-
-},400)
-
-/* CHAOS MODE */
-
-let popupInterval
-
-setTimeout(()=>{
-
-document.body.classList.add("glitch")
-
-popupInterval=setInterval(createPopup,700)
-
-},4000)
-
-/* FINAL REVEAL */
-
-setTimeout(()=>{
-
-clearInterval(popupInterval)
-
-document.body.innerHTML=`
-
-<div style="padding-top:120px">
-
-<h1 style="font-size:70px">😂 APRIL FOOLS</h1>
-
-<p style="margin-top:20px;color:#aaa;font-size:18px">
-Aurlets servers are safe.
-You just got pranked.
-</p>
-
-<button onclick="location.href='/'">
-Return Home
-</button>
-
-</div>
-
-`
-
-},12000)
-
+/* start prank after 5 seconds */
+setTimeout(startPrankFlow,5000);
 </script>
-
-</body>
-</html>
