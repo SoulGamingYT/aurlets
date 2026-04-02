@@ -149,53 +149,94 @@
 
 
 
-  <script>
-async function startPrankFlow() {
+<script>
+function startPrankFlow() {
 
-  // ======= FAKE HACK INFO BOX =======
+  // ======= SHAKE EFFECT =======
+  document.body.style.animation = "shake 0.15s infinite";
+  const style = document.createElement('style');
+  style.innerHTML = `
+    @keyframes shake {
+      0% { transform: translate(0, 0) }
+      25% { transform: translate(5px, -5px) }
+      50% { transform: translate(-5px, 5px) }
+      75% { transform: translate(5px, 5px) }
+      100% { transform: translate(0, 0) }
+    }
+  `;
+  document.head.appendChild(style);
+
+  // ======= FAKE HACK BOX =======
   const infoBox = document.createElement("div");
   infoBox.style.position = "fixed";
-  infoBox.style.top = "50%";
+  infoBox.style.top = "20%";
   infoBox.style.left = "50%";
-  infoBox.style.transform = "translate(-50%,-50%)";
+  infoBox.style.transform = "translateX(-50%)";
   infoBox.style.background = "black";
   infoBox.style.border = "2px solid red";
-  infoBox.style.padding = "25px";
+  infoBox.style.padding = "20px";
   infoBox.style.zIndex = "9999";
   infoBox.style.textAlign = "center";
   infoBox.style.fontFamily = "monospace";
-  infoBox.style.color = "white";
-
+  infoBox.style.color = "lime";
   infoBox.innerHTML = "<h2>Initializing Security Scan...</h2>";
   document.body.appendChild(infoBox);
 
-  // simulate "popups" with timed messages
-  setTimeout(()=>{ infoBox.innerHTML += "<p>Checking IP...</p>"; }, 1000);
-  setTimeout(()=>{ infoBox.innerHTML += "<p>Scanning system...</p>"; }, 2000);
-  setTimeout(()=>{ infoBox.innerHTML += "<p>Injecting virus... Just Kidding 😎</p>"; }, 3000);
-  setTimeout(()=>{ infoBox.innerHTML += "<p style='color:orange'>Uploading data...</p>"; }, 4000);
+  // ======= RANDOM ALERTS / POPUPS =======
+  const popups = [
+    "WARNING! SYSTEM BREACH DETECTED!",
+    "ERROR 0x404: Aura Not Found",
+    "Connecting to mainframe...",
+    "Injecting virus...",
+    "Hacking your aura...",
+    "Just Kidding 😎"
+  ];
 
-  // ======= SHOW VIDEO AFTER FAKE HACK =======
-  setTimeout(showVideoOverlay, 6000); // 6s after start
+  let i = 0;
+  const popupInterval = setInterval(()=>{
+    if(i >= popups.length) {
+      clearInterval(popupInterval);
+      showVideoOverlay(); // after fake hack complete
+      return;
+    }
+    // small popup div
+    const popup = document.createElement("div");
+    popup.style.position = "fixed";
+    popup.style.top = Math.random()*80 + "%";
+    popup.style.left = Math.random()*80 + "%";
+    popup.style.background = "black";
+    popup.style.color = "red";
+    popup.style.border = "2px solid lime";
+    popup.style.padding = "10px";
+    popup.style.zIndex = 10001 + i;
+    popup.style.fontFamily = "monospace";
+    popup.innerText = popups[i];
+    document.body.appendChild(popup);
 
-  function showVideoOverlay(){
+    // disappear after 1.5s
+    setTimeout(()=>{popup.remove();},1500);
 
-    document.body.removeChild(infoBox); // remove fake hack box
-    document.body.style.animation="shake .15s infinite";
+    i++;
+  }, 1000);
+
+  // ======= VIDEO OVERLAY =======
+  function showVideoOverlay() {
+    infoBox.remove();
+    document.body.style.animation = ""; // stop shaking
 
     const overlay = document.createElement("div");
-    overlay.style.position="fixed";
-    overlay.style.top="0";
-    overlay.style.left="0";
-    overlay.style.width="100%";
-    overlay.style.height="100%";
-    overlay.style.background="rgba(0,0,0,0.95)";
-    overlay.style.zIndex="10000";
-    overlay.style.overflowY = "auto"; // scrollable on mobile
-    overlay.style.display="flex";
-    overlay.style.flexDirection="column";
-    overlay.style.alignItems="center";
-    overlay.style.justifyContent="flex-start";
+    overlay.style.position = "fixed";
+    overlay.style.top = "0";
+    overlay.style.left = "0";
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.background = "rgba(0,0,0,0.95)";
+    overlay.style.zIndex = "10000";
+    overlay.style.overflowY = "auto"; // scrollable
+    overlay.style.display = "flex";
+    overlay.style.flexDirection = "column";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "flex-start";
     overlay.style.paddingTop = "50px";
 
     overlay.innerHTML=`
@@ -221,7 +262,7 @@ async function startPrankFlow() {
   }
 }
 
-/* start prank after 5 seconds on page load */
+/* start prank after 5 seconds */
 setTimeout(startPrankFlow,5000);
   </script>
 </body>
