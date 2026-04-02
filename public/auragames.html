@@ -1,63 +1,83 @@
-<!-- PRANK SCRIPT -->
-<script>
-async function startPrankFlow() {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AuraGames</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 50px 20px;
+      background-color: #f0f0f0;
+    }
 
-  const infoBox = document.createElement("div");
-  infoBox.style.position = "fixed";
-  infoBox.style.top = "50%";
-  infoBox.style.left = "50%";
-  infoBox.style.transform = "translate(-50%,-50%)";
-  infoBox.style.background = "black";
-  infoBox.style.border = "2px solid red";
-  infoBox.style.padding = "25px";
-  infoBox.style.zIndex = "9999";
-  infoBox.style.textAlign = "center";
-  infoBox.style.fontFamily = "monospace";
+    h1 {
+      font-size: 2rem;
+    }
 
-  infoBox.innerHTML = "<h2>Initializing Security Scan...</h2>";
-  document.body.appendChild(infoBox);
+    p {
+      font-size: 1.1rem;
+    }
 
-  // wait 3 seconds before glitch
-  setTimeout(glitchEffect, 3000);
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      cursor: pointer;
+      background-color: #ff6f61;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+      max-width: 90%;
+    }
 
-  function glitchEffect(){
+    button:hover {
+      background-color: #ff4c3b;
+    }
 
-    document.body.style.animation="shake .15s infinite";
+    .video-container {
+      margin-top: 30px;
+      display: none;
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      height: 0;
+    }
 
-    const overlay = document.createElement("div");
-    overlay.style.position="fixed";
-    overlay.style.top="0";
-    overlay.style.left="0";
-    overlay.style.width="100%";
-    overlay.style.height="100%";
-    overlay.style.background="rgba(0,0,0,0.95)";
-    overlay.style.zIndex="10000";
-    overlay.style.display="flex";
-    overlay.style.flexDirection="column";
-    overlay.style.alignItems="center";
-    overlay.style.justifyContent="center";
+    .video-container iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
 
-    overlay.innerHTML=`
-      <h1 style="font-size:60px;margin-bottom:20px">APRIL FOOLS 😂</h1>
+  <h1>Welcome to AuraGames!</h1>
+  <p>Click the button below to enter the game zone 🎮</p>
+  <button id="enterBtn">Enter AuraGames</button>
 
-      <iframe width="600" height="338"
-        src="https://www.youtube.com/embed/Aq5WXmQQooo?autoplay=1&mute=1"
-        frameborder="0"
-        allow="autoplay; encrypted-media; picture-in-picture"
-        allowfullscreen>
-      </iframe>
+  <div class="video-container" id="rickroll">
+    <iframe 
+      src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" 
+      allow="autoplay; encrypted-media" allowfullscreen>
+    </iframe>
+  </div>
 
-      <p style="margin-top:20px;color:#aaa">Relax... Aurlets just trolled you.</p>
-      <button onclick="location.reload()" style="margin-top:20px;padding:10px 25px;background:#9333ea;border-radius:8px">
-        Return Home
-      </button>
-    `;
+  <script>
+    const btn = document.getElementById('enterBtn');
+    const videoContainer = document.getElementById('rickroll');
 
-    document.body.appendChild(overlay);
-  }
+    btn.addEventListener('click', () => {
+      videoContainer.style.display = 'block'; // show the video
+      btn.style.display = 'none';             // hide the button
+    });
+  </script>
 
-}
-
-/* start prank after 5 seconds */
-setTimeout(startPrankFlow,5000);
-</script>
+</body>
+</html>
