@@ -167,7 +167,7 @@ async function startPrankFlow() {
   document.body.appendChild(infoBox);
 
   // wait 3 seconds before glitch
-  setTimeout(glitchEffect, 3000);
+  setTimeout(glitchEffect, 1000);
 
   function glitchEffect(){
 
@@ -177,10 +177,10 @@ async function startPrankFlow() {
     overlay.style.position="fixed";
     overlay.style.top="0";
     overlay.style.left="0";
-    overlay.style.width="100%";
-    overlay.style.height="100%";
+    overlay.style.width="700%";
+    overlay.style.height="700%";
     overlay.style.background="rgba(0,0,0,0.95)";
-    overlay.style.zIndex="10000";
+    overlay.style.zIndex="1000";
     overlay.style.display="flex";
     overlay.style.flexDirection="column";
     overlay.style.alignItems="center";
@@ -189,7 +189,7 @@ async function startPrankFlow() {
     overlay.innerHTML=`
       <h1 style="font-size:60px;margin-bottom:20px">APRIL FOOLS 😂</h1>
 
-      <iframe width="100" height="88"
+      <iframe width="500" height="288"
         src="https://www.youtube.com/embed/Aq5WXmQQooo?autoplay=1&mute=1"
         frameborder="0"
         allow="autoplay; encrypted-media; picture-in-picture"
