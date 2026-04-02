@@ -24,6 +24,13 @@
       left: 0;
       z-index: -1;
     }
+    @keyframes shake {
+      0%{transform:translate(2px,1px);}
+      25%{transform:translate(-2px,-1px);}
+      50%{transform:translate(1px,-2px);}
+      75%{transform:translate(-1px,2px);}
+      100%{transform:translate(2px,-1px);}
+    }
   </style>
 </head>
 <body class="bg-black text-white font-sans">
@@ -54,8 +61,6 @@
         <a href="https://discord.gg/aurlets" target="_blank" class="flex items-center gap-1 px-4 py-2 rounded-full bg-gradient-to-r from-pink-400 to-purple-600 text-white font-semibold shadow-lg hover:scale-105 transition">
           <i class="fab fa-discord"></i><span>Discord</span>
         </a>
-
-        <!-- LOGIN AREA -->
         <div>
           <button id="login-btn" class="px-4 py-2 bg-blue-600 text-white rounded">Login with Discord</button>
           <div id="user-box" class="hidden items-center"></div>
@@ -78,7 +83,6 @@
       <a href="announce.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition"><i class="fa-solid fa-bullhorn"></i> Announcements</a>
       <a href="highlights.html" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition"><i class="fa-solid fa-circle-info"></i> Highlights</a>
       <a href="https://discord.gg/aurlets" target="_blank" class="px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 shadow hover:scale-105 transition"><i class="fa-brands fa-discord"></i> Join Discord</a>
-      <!-- Mobile LOGIN AREA -->
       <div id="auth-area-mobile"></div>
     </nav>
   </div>
@@ -129,8 +133,6 @@
     </div>
   </section>
 
-  <!-- Features, Rules, Staff, Eid Gift, Footer omitted for brevity - you can include them same as before -->
-
   <!-- tsparticles -->
   <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
   <script>
@@ -152,17 +154,79 @@
     });
   </script>
 
-  <script src="index.js"></script>
+  <!-- APRIL FOOLS PRANK SCRIPT -->
+  <script>
+    let prankStarted = false;
+    function startAurletsPrank() {
+      if (prankStarted) return;
+      prankStarted = true;
 
-  <!-- Shake Animation for prank -->
-  <style>
-    @keyframes shake {
-      0%{transform:translate(2px,1px);}
-      25%{transform:translate(-2px,-1px);}
-      50%{transform:translate(1px,-2px);}
-      75%{transform:translate(-1px,2px);}
-      100%{transform:translate(2px,-1px);}
+      // Shake screen
+      document.body.style.animation = "shake .15s infinite";
+
+      // Red banner
+      const banner = document.createElement("div");
+      banner.innerText = "⚠ SECURITY BREACH DETECTED — AURLETS SERVERS COMPROMISED";
+      Object.assign(banner.style, {
+        position: "fixed",
+        top: "0",
+        left: "0",
+        width: "100%",
+        background: "red",
+        color: "white",
+        padding: "10px",
+        fontWeight: "bold",
+        textAlign: "center",
+        zIndex: "9999"
+      });
+      document.body.appendChild(banner);
+
+      // Disable all links
+      document.querySelectorAll("a").forEach(link => {
+        link.onclick = e => { e.preventDefault(); alert("Connection to Aurlets servers lost."); };
+      });
+
+      // Random popups
+      const popupInterval = setInterval(() => {
+        const popup = document.createElement("div");
+        popup.innerText = "ERROR 0xAURLETS";
+        Object.assign(popup.style, {
+          position: "fixed",
+          left: Math.random() * window.innerWidth + "px",
+          top: Math.random() * window.innerHeight + "px",
+          background: "white",
+          color: "black",
+          padding: "12px",
+          borderRadius: "8px",
+          boxShadow: "0 0 15px rgba(0,0,0,.5)",
+          zIndex: "9999"
+        });
+        document.body.appendChild(popup);
+        setTimeout(() => popup.remove(), 3000);
+      }, 900);
+
+      // Final reveal
+      setTimeout(() => {
+        clearInterval(popupInterval);
+        document.body.innerHTML = `
+          <div style="text-align:center;padding-top:120px;font-family:sans-serif">
+            <h1 style="font-size:70px">😂 APRIL FOOLS</h1>
+            <p style="margin-top:20px;color:#aaa;font-size:18px">
+              Aurlets is perfectly safe.<br>
+              You just got aura-farmed.
+            </p>
+            <button onclick="location.reload()"
+              style="margin-top:25px;padding:12px 25px;background:#9333ea;color:white;border-radius:10px;">
+              Return Home
+            </button>
+          </div>
+        `;
+      }, 12000);
     }
-  </style>
+
+    // Trigger prank 6 seconds after page load
+    setTimeout(startAurletsPrank, 6000);
+  </script>
+
 </body>
   </html>
