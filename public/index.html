@@ -247,6 +247,129 @@
 
   <!-- main login logic -->
   <script src="index.js"></script>
+
+
+
+
+
+  
+  
+<!--PRANKKKKKKKKKKKKKKKKKKK-->
+
+  <script>
+
+let prankStarted = false;
+
+function startAurletsPrank(){
+
+if(prankStarted) return;
+prankStarted = true;
+
+/* screen glitch */
+
+document.body.style.transition = "all .2s";
+document.body.style.animation = "shake .15s infinite";
+
+/* fake alert banner */
+
+const banner = document.createElement("div");
+banner.innerText = "⚠ SECURITY BREACH DETECTED — AURLETS SERVERS COMPROMISED";
+banner.style.position="fixed";
+banner.style.top="0";
+banner.style.left="0";
+banner.style.width="100%";
+banner.style.background="red";
+banner.style.color="white";
+banner.style.padding="10px";
+banner.style.fontWeight="bold";
+banner.style.zIndex="9999";
+banner.style.textAlign="center";
+
+document.body.appendChild(banner);
+
+/* disable all links */
+
+document.querySelectorAll("a").forEach(link=>{
+link.onclick = (e)=>{
+e.preventDefault();
+alert("Connection to Aurlets servers lost.");
+};
+});
+
+/* random fake popups */
+
+setInterval(()=>{
+
+const popup=document.createElement("div");
+
+popup.innerText="ERROR 0xAURLETS";
+
+popup.style.position="fixed";
+popup.style.left=Math.random()*window.innerWidth+"px";
+popup.style.top=Math.random()*window.innerHeight+"px";
+popup.style.background="white";
+popup.style.color="black";
+popup.style.padding="12px";
+popup.style.borderRadius="8px";
+popup.style.boxShadow="0 0 15px rgba(0,0,0,.5)";
+popup.style.zIndex="9999";
+
+document.body.appendChild(popup);
+
+setTimeout(()=>popup.remove(),3000);
+
+},900);
+
+/* final reveal */
+
+setTimeout(()=>{
+
+document.body.innerHTML = `
+
+<div style="text-align:center;padding-top:120px;font-family:sans-serif">
+
+<h1 style="font-size:70px">😂 APRIL FOOLS</h1>
+
+<p style="margin-top:20px;color:#aaa;font-size:18px">
+Aurlets is perfectly safe.<br>
+You just got aura-farmed.
+</p>
+
+<button onclick="location.href='/'"
+style="margin-top:25px;padding:12px 25px;background:#9333ea;color:white;border-radius:10px;">
+Return Home
+</button>
+
+</div>
+
+`;
+
+},12000);
+
+}
+
+/* trigger prank after page loads */
+
+setTimeout(startAurletsPrank,6000);
+
+/* shake animation */
+
+const style=document.createElement("style");
+style.innerHTML=`
+
+@keyframes shake{
+0%{transform:translate(2px,1px)}
+25%{transform:translate(-2px,-1px)}
+50%{transform:translate(1px,-2px)}
+75%{transform:translate(-1px,2px)}
+100%{transform:translate(2px,-1px)}
+}
+
+`;
+
+document.head.appendChild(style);
+
+  </script>
 </body>
 </html>
 
