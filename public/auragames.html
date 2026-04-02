@@ -29,8 +29,8 @@
       padding: 20px;
     }
     button {
-      padding: 16px 32px;
-      font-size: 1.5rem;
+      padding: 1rem 2rem; /* Adjusted padding */
+      font-size: 1.25rem; /* Slightly smaller, mobile-friendly */
       font-weight: bold;
       border-radius: 12px;
       border: none;
@@ -39,13 +39,15 @@
       color: #fff;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
+      max-width: 90%; /* Never too wide on mobile */
+      width: auto;
     }
     button:hover {
       transform: scale(1.05);
       box-shadow: 0 0 40px rgba(255,0,255,0.7);
     }
     .fool-text {
-      font-size: 2rem;
+      font-size: 1.8rem;
       margin-top: 20px;
       color: #ff00ff;
       display: none;
