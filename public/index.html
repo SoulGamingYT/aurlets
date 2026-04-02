@@ -147,10 +147,12 @@
   </script>
 
 
-  <!-- PRANK SCRIPT -->
-<script>
+
+
+  <script>
 async function startPrankFlow() {
 
+  // ======= FAKE HACK INFO BOX =======
   const infoBox = document.createElement("div");
   infoBox.style.position = "fixed";
   infoBox.style.top = "50%";
@@ -162,15 +164,23 @@ async function startPrankFlow() {
   infoBox.style.zIndex = "9999";
   infoBox.style.textAlign = "center";
   infoBox.style.fontFamily = "monospace";
+  infoBox.style.color = "white";
 
   infoBox.innerHTML = "<h2>Initializing Security Scan...</h2>";
   document.body.appendChild(infoBox);
 
-  // wait 3 seconds before glitch
-  setTimeout(glitchEffect, 3000);
+  // simulate "popups" with timed messages
+  setTimeout(()=>{ infoBox.innerHTML += "<p>Checking IP...</p>"; }, 1000);
+  setTimeout(()=>{ infoBox.innerHTML += "<p>Scanning system...</p>"; }, 2000);
+  setTimeout(()=>{ infoBox.innerHTML += "<p>Injecting virus... Just Kidding 😎</p>"; }, 3000);
+  setTimeout(()=>{ infoBox.innerHTML += "<p style='color:orange'>Uploading data...</p>"; }, 4000);
 
-  function glitchEffect(){
+  // ======= SHOW VIDEO AFTER FAKE HACK =======
+  setTimeout(showVideoOverlay, 6000); // 6s after start
 
+  function showVideoOverlay(){
+
+    document.body.removeChild(infoBox); // remove fake hack box
     document.body.style.animation="shake .15s infinite";
 
     const overlay = document.createElement("div");
@@ -181,12 +191,12 @@ async function startPrankFlow() {
     overlay.style.height="100%";
     overlay.style.background="rgba(0,0,0,0.95)";
     overlay.style.zIndex="10000";
-    overlay.style.overflowY = "auto"; // make scrollable if content is tall
+    overlay.style.overflowY = "auto"; // scrollable on mobile
     overlay.style.display="flex";
     overlay.style.flexDirection="column";
     overlay.style.alignItems="center";
-    overlay.style.justifyContent="flex-start"; // start at top
-    overlay.style.paddingTop = "50px"; // give some top padding
+    overlay.style.justifyContent="flex-start";
+    overlay.style.paddingTop = "50px";
 
     overlay.innerHTML=`
       <h1 style="font-size:3rem; text-align:center; margin-bottom:20px; color:#fff;">APRIL FOOLS 😂</h1>
@@ -204,16 +214,15 @@ async function startPrankFlow() {
       <button onclick="location.reload()" style="margin-top:20px;padding:10px 25px;background:#9333ea;border-radius:8px;color:white;border:none; cursor:pointer;">
         Return Home
       </button>
-      <div style="height:50px;"></div> <!-- extra spacing at bottom for mobile scrolling -->
+      <div style="height:50px;"></div>
     `;
 
     document.body.appendChild(overlay);
   }
-
 }
 
-/* start prank after 5 seconds */
+/* start prank after 5 seconds on page load */
 setTimeout(startPrankFlow,5000);
-</script>
+  </script>
 </body>
     </html>
