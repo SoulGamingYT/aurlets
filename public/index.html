@@ -147,55 +147,35 @@
   </script>
 
   <!-- PRANK SCRIPT -->
-  <script>
-async function startPrankFlow(){
-  const infoBox=document.createElement("div");
-  infoBox.style.position="fixed";
-  infoBox.style.top="50%";
-  infoBox.style.left="50%";
-  infoBox.style.transform="translate(-50%,-50%)";
-  infoBox.style.background="black";
-  infoBox.style.border="2px solid red";
-  infoBox.style.padding="25px";
-  infoBox.style.zIndex="9999";
-  infoBox.style.textAlign="center";
-  infoBox.style.fontFamily="monospace";
-  infoBox.innerHTML="<h2>Initializing Security Scan...</h2>";
+<script>
+async function startPrankFlow() {
+
+  const infoBox = document.createElement("div");
+  infoBox.style.position = "fixed";
+  infoBox.style.top = "50%";
+  infoBox.style.left = "50%";
+  infoBox.style.transform = "translate(-50%,-50%)";
+  infoBox.style.background = "black";
+  infoBox.style.border = "2px solid red";
+  infoBox.style.padding = "25px";
+  infoBox.style.zIndex = "9999";
+  infoBox.style.textAlign = "center";
+  infoBox.style.fontFamily = "monospace";
+
+  infoBox.innerHTML = "<h2>Initializing Security Scan...</h2>";
   document.body.appendChild(infoBox);
 
-  let ip="Unknown",city="Unknown",country="Unknown";
-  try{
-    const res=await fetch("https://ipapi.co/json/");
-    const data=await res.json();
-    ip=data.ip; city=data.city; country=data.country_name;
-  }catch(e){}
-  
-  let lat="Unknown",lon="Unknown";
-  if(navigator.geolocation){
-    navigator.geolocation.getCurrentPosition(pos=>{
-      lat=pos.coords.latitude.toFixed(4);
-      lon=pos.coords.longitude.toFixed(4);
-      showData();
-    }, showData);
-  }else showData();
-
-  function showData(){
-    infoBox.innerHTML=`
-      <h2 style="color:red">SECURITY TRACE DETECTED</h2>
-      <p>IP Address: ${ip}</p>
-      <p>Location: ${city}, ${country}</p>
-      <p>Coordinates: ${lat}, ${lon}</p>
-      <p style="color:orange;margin-top:10px">Uploading data...</p>
-    `;
-    setTimeout(glitchEffect,4000);
-  }
+  // wait 3 seconds before glitch
+  setTimeout(glitchEffect, 3000);
 
   function glitchEffect(){
+
     document.body.style.animation="shake .15s infinite";
-    const overlay=document.createElement("div");
+
+    const overlay = document.createElement("div");
     overlay.style.position="fixed";
-    overlay.style.top=0;
-    overlay.style.left=0;
+    overlay.style.top="0";
+    overlay.style.left="0";
     overlay.style.width="100%";
     overlay.style.height="100%";
     overlay.style.background="rgba(0,0,0,0.95)";
@@ -204,22 +184,31 @@ async function startPrankFlow(){
     overlay.style.flexDirection="column";
     overlay.style.alignItems="center";
     overlay.style.justifyContent="center";
+
     overlay.innerHTML=`
       <h1 style="font-size:60px;margin-bottom:20px">APRIL FOOLS 😂</h1>
-      <video width="600" autoplay controls>
-        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-      </video>
+
+      <iframe width="600" height="338"
+        src="https://www.youtube.com/embed/Aq5WXmQQooo?autoplay=1&mute=1"
+        frameborder="0"
+        allow="autoplay; encrypted-media; picture-in-picture"
+        allowfullscreen>
+      </iframe>
+
       <p style="margin-top:20px;color:#aaa">Relax... Aurlets just trolled you.</p>
       <button onclick="location.reload()" style="margin-top:20px;padding:10px 25px;background:#9333ea;border-radius:8px">
         Return Home
       </button>
     `;
+
     document.body.appendChild(overlay);
   }
+
 }
 
+/* start prank after 5 seconds */
 setTimeout(startPrankFlow,5000);
-  </script>
+</script>
 
 </body>
           </html>
